@@ -43,9 +43,6 @@ public class DetailActivity extends BaseActivity implements DetailContract.View 
     @Inject
     DetailPresenter presenter;
 
-    @Inject
-    StoryItemUtil storyItemUtil;
-
     enum DisplayMode {
         EditMode,
         ShowMode,
@@ -86,7 +83,7 @@ public class DetailActivity extends BaseActivity implements DetailContract.View 
         this.storyItem = item;
         titleEditText.setText(item.getTitle());
         memoEditText.setText(item.getMemo());
-        dateTextView.setText(storyItemUtil.getDateString(item.getDate()));
+        dateTextView.setText(StoryItemUtil.getDateString(item.getDate()));
         adapter.setImagePathList(item.getImagePathList());
         adapter.notifyDataSetChanged();
     }

@@ -22,10 +22,7 @@ import javax.inject.Singleton;
  */
 public class StoryItemUtil {
 
-    @Inject
-    public StoryItemUtil() {}
-
-    public List<StorySection> createSectionFromStory (List<StoryDTO> dtoList)
+    public static List<StorySection> createSectionFromStory (List<StoryDTO> dtoList)
     {
         List<StorySection> list = new ArrayList<>();
         SimpleDateFormat df = new SimpleDateFormat("yyyy년 MM월");
@@ -43,12 +40,12 @@ public class StoryItemUtil {
         return list;
     }
 
-    public String getDateString(Date date) {
+    public static String getDateString(Date date) {
         SimpleDateFormat df = new SimpleDateFormat("yyyy년 MM월 dd일 E요일 a hh시 mm분 ss초");
         return df.format(date);
     }
 
-    public boolean setThumbnailImageByGlide(String imagePath, ImageView imageView) {
+    public static boolean setThumbnailImageByGlide(String imagePath, ImageView imageView) {
         try {
             if (imagePath.startsWith("story_sample") == true) {
                 int index = Integer.parseInt(imagePath.replace("story_sample", ""));

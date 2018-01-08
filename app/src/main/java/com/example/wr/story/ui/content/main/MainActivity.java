@@ -40,9 +40,6 @@ public class MainActivity extends BaseActivity implements MainContract.View {
     @Inject
     MainPresenter presenter;
 
-    @Inject
-    StoryItemUtil storyItemUtil;
-
     private StorySectionAdapter adapter;
 
     @BindView(R.id.story_recyclerview)
@@ -96,7 +93,6 @@ public class MainActivity extends BaseActivity implements MainContract.View {
         adapter.setEmptyView(R.layout.recyclerview_noitem_bg, (ViewGroup)storyRecyclerView.getParent());
         adapter.setOnItemClickListener((BaseQuickAdapter adapter, View view, int position)
                 -> presenter.onStoryItemSelected(position));
-        adapter.setStoryItemUtil(storyItemUtil);
         storyRecyclerView.setAdapter(adapter);
         storyRecyclerView.clearOnScrollListeners();
         storyRecyclerView.addOnScrollListener(new HidingScrollListener() {

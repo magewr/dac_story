@@ -14,8 +14,6 @@ import lombok.Setter;
  */
 
 public class StorySectionAdapter extends BaseSectionQuickAdapter<StorySection, BaseViewHolder> {
-    @Setter
-    StoryItemUtil storyItemUtil;
 
     public StorySectionAdapter(int layoutResId, int sectionHeadResId, List<StorySection> data) {
         super(layoutResId, sectionHeadResId, data);
@@ -30,7 +28,6 @@ public class StorySectionAdapter extends BaseSectionQuickAdapter<StorySection, B
     protected void convert(BaseViewHolder helper, StorySection item) {
         helper.setText(R.id.story_content_title, item.t.getTitle());
         String imagePath = item.t.getImagePathList().get(0);
-        dagger.internal.Preconditions.checkNotNull(storyItemUtil);
-        storyItemUtil.setThumbnailImageByGlide(imagePath, helper.getView(R.id.story_content_image));
+        StoryItemUtil.setThumbnailImageByGlide(imagePath, helper.getView(R.id.story_content_image));
     }
 }

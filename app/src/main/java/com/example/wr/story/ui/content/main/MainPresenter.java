@@ -25,9 +25,6 @@ public class MainPresenter extends Presenter<MainContract.View> implements MainC
         this.getStoryList = getStoryListUseCase;
     }
 
-    @Inject
-    StoryItemUtil storyItemUtil;
-
     @Override
     public void onStartPresenter() {
         super.onStartPresenter();
@@ -61,7 +58,7 @@ public class MainPresenter extends Presenter<MainContract.View> implements MainC
         @Override
         public void onNext(List<StoryDTO> storyDTOS) {
             getView().getRecyclerViewAdapter().getData().clear();
-            getView().getRecyclerViewAdapter().addData(storyItemUtil.createSectionFromStory(storyDTOS));
+            getView().getRecyclerViewAdapter().addData(StoryItemUtil.createSectionFromStory(storyDTOS));
             getView().onRecyclerViewAdapterUpdated();
         }
 
