@@ -1,4 +1,4 @@
-package com.example.wr.story.ui.content.main.listener;
+package com.example.wr.story.ui.listener;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;

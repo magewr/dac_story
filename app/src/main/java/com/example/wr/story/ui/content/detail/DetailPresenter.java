@@ -4,6 +4,7 @@ import com.example.wr.story.data.local.dto.StoryDTO;
 import com.example.wr.story.interactor.GetStoryById;
 import com.example.wr.story.interactor.UpdateStory;
 import com.example.wr.story.ui.base.Presenter;
+import com.example.wr.story.ui.listener.PresenterResultListener;
 
 import javax.inject.Inject;
 
@@ -51,16 +52,16 @@ public class DetailPresenter extends Presenter<DetailContract.View> implements D
     }
 
     @Override
-    public void onStoryItemModified(StoryDTO item) {
+    public void onStoryItemModified(StoryDTO item, PresenterResultListener listener) {
         updateStory.execute(new DisposableCompletableObserver() {
             @Override
             public void onComplete() {
-
+                listener.onSuccess();
             }
 
             @Override
             public void onError(Throwable e) {
-
+                listener.onError(e.getMessage());
             }
         }, item);
     }

@@ -11,12 +11,12 @@ import android.view.ViewGroup;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.wr.story.R;
-import com.example.wr.story.di.component.ActivityComponent;
 import com.example.wr.story.di.module.ActivityModule;
 import com.example.wr.story.ui.base.BaseActivity;
 import com.example.wr.story.ui.content.detail.DetailActivity;
 import com.example.wr.story.ui.content.main.adapter.StorySectionAdapter;
-import com.example.wr.story.ui.content.main.listener.HidingScrollListener;
+import com.example.wr.story.ui.listener.HidingScrollListener;
+import com.example.wr.story.ui.util.StoryItemUtil;
 import com.github.clans.fab.FloatingActionMenu;
 
 import javax.inject.Inject;
@@ -39,6 +39,9 @@ public class MainActivity extends BaseActivity implements MainContract.View {
 
     @Inject
     MainPresenter presenter;
+
+    @Inject
+    StoryItemUtil storyItemUtil;
 
     private StorySectionAdapter adapter;
 
@@ -93,6 +96,7 @@ public class MainActivity extends BaseActivity implements MainContract.View {
         adapter.setEmptyView(R.layout.recyclerview_noitem_bg, (ViewGroup)storyRecyclerView.getParent());
         adapter.setOnItemClickListener((BaseQuickAdapter adapter, View view, int position)
                 -> presenter.onStoryItemSelected(position));
+        adapter.setStoryItemUtil(storyItemUtil);
         storyRecyclerView.setAdapter(adapter);
         storyRecyclerView.clearOnScrollListeners();
         storyRecyclerView.addOnScrollListener(new HidingScrollListener() {

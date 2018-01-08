@@ -5,6 +5,9 @@ import com.example.wr.story.data.local.dto.StoryDTO;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -27,8 +30,9 @@ public class LocalRepository {
 
     public Observable<List<StoryDTO>> getStoryDTOList() {
         Observable<List<StoryDTO>> sampleStoryDTOListObservable = Observable.create(emitter -> {
+            Collections.sort(storyList, (o1, o2) -> o2.getDate().compareTo(o1.getDate()));
             emitter.onNext(storyList);
-            emitter.onComplete();
+//            emitter.onComplete();
         });
         return sampleStoryDTOListObservable;
     }

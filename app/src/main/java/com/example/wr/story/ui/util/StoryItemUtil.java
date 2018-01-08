@@ -1,9 +1,10 @@
 package com.example.wr.story.ui.util;
 
-import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
+import com.example.wr.story.App;
 import com.example.wr.story.R;
 import com.example.wr.story.data.local.dto.StoryDTO;
 import com.example.wr.story.ui.content.main.adapter.StorySection;
@@ -13,13 +14,16 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import io.reactivex.Single;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
 /**
  * Created by WR.
  */
-
 public class StoryItemUtil {
+
+    @Inject
+    public StoryItemUtil() {}
 
     public List<StorySection> createSectionFromStory (List<StoryDTO> dtoList)
     {
@@ -44,4 +48,23 @@ public class StoryItemUtil {
         return df.format(date);
     }
 
+    public boolean setThumbnailImageByGlide(String imagePath, ImageView imageView) {
+        try {
+            if (imagePath.startsWith("story_sample") == true) {
+                int index = Integer.parseInt(imagePath.replace("story_sample", ""));
+                int[] sampleDrawable = {R.drawable.sample1, R.drawable.sample2, R.drawable.sample3, R.drawable.sample4};
+                Glide.with(App.getContext())
+                        .load(sampleDrawable[index])
+                        .thumbnail(0.5f)
+                        .into(imageView);
+                return true;
+            } else {
+
+                return true;
+            }
+        }
+        catch (Exception e) {
+            return false;
+        }
+    }
 }

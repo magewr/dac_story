@@ -60,6 +60,7 @@ public class MainPresenter extends Presenter<MainContract.View> implements MainC
 
         @Override
         public void onNext(List<StoryDTO> storyDTOS) {
+            getView().getRecyclerViewAdapter().getData().clear();
             getView().getRecyclerViewAdapter().addData(storyItemUtil.createSectionFromStory(storyDTOS));
             getView().onRecyclerViewAdapterUpdated();
         }
