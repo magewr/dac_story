@@ -3,6 +3,7 @@ package com.example.wr.story.di.component;
 import com.example.wr.story.di.module.ActivityModule;
 import com.example.wr.story.di.scope.PerActivity;
 import com.example.wr.story.ui.content.detail.DetailActivity;
+import com.example.wr.story.ui.content.detail.gallery.GalleryActivity;
 import com.example.wr.story.ui.content.main.MainActivity;
 import com.example.wr.story.ui.content.splash.SplashActivity;
 
@@ -18,4 +19,5 @@ public interface ActivityComponent {
     void inject (MainActivity activity);
     void inject (SplashActivity activity);
     void inject (DetailActivity activity);
+    void inject (GalleryActivity activity);
 }

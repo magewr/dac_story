@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.example.wr.story.R;
+import com.example.wr.story.ui.listener.OnItemClickListener;
 import com.example.wr.story.ui.util.StoryItemUtil;
 
 import butterknife.BindView;
@@ -21,11 +22,15 @@ import butterknife.ButterKnife;
 
 public class ViewPagerImageItemFragment extends Fragment {
 
+    private int position;
     private String imagePath;
+    private OnItemClickListener onClickListener;
 
-    static ViewPagerImageItemFragment newInstance(String imagePaht) {
+    static ViewPagerImageItemFragment newInstance(int position, String imagePath, OnItemClickListener onClickListener) {
         ViewPagerImageItemFragment instance = new ViewPagerImageItemFragment();
-        instance.imagePath = imagePaht;
+        instance.position = position;
+        instance.imagePath = imagePath;
+        instance.onClickListener = onClickListener;
         return instance;
     }
 
@@ -36,6 +41,7 @@ public class ViewPagerImageItemFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.viewpager_item_detail_image, container, false);
         ButterKnife.bind(this, view);
+        view.setOnClickListener((v) -> onClickListener.onClick(position));
         return view;
     }
 

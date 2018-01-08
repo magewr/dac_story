@@ -1,6 +1,8 @@
 package com.example.wr.story.ui.util;
 
+import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -9,6 +11,7 @@ import com.example.wr.story.R;
 import com.example.wr.story.data.local.dto.StoryDTO;
 import com.example.wr.story.ui.content.main.adapter.StorySection;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -56,12 +59,30 @@ public class StoryItemUtil {
                         .into(imageView);
                 return true;
             } else {
-
+                Glide.with(App.getContext())
+                        .load(new File(imagePath))
+                        .thumbnail(0.5f)
+                        .into(imageView);
                 return true;
             }
         }
         catch (Exception e) {
             return false;
+        }
+    }
+
+    public static Bitmap getBitmapFromImagePath(String imagePath) {
+        try {
+            if (imagePath.startsWith("story_sample") == true) {
+                int index = Integer.parseInt(imagePath.replace("story_sample", ""));
+                int[] sampleDrawable = {R.drawable.sample1, R.drawable.sample2, R.drawable.sample3, R.drawable.sample4};
+                return BitmapFactory.decodeResource(App.getContext().getResources(), sampleDrawable[index]);
+            }
+            Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
+            return bitmap;
+        }
+        catch (Exception e) {
+            return BitmapFactory.decodeResource(App.getContext().getResources(), R.drawable.image_broken);
         }
     }
 }

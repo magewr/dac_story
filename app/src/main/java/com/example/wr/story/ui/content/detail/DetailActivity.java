@@ -14,6 +14,7 @@ import com.example.wr.story.data.local.dto.StoryDTO;
 import com.example.wr.story.di.module.ActivityModule;
 import com.example.wr.story.ui.base.BaseActivity;
 import com.example.wr.story.ui.content.detail.adapter.ThumbnailViewPagerAdapter;
+import com.example.wr.story.ui.content.detail.gallery.GalleryActivity;
 import com.example.wr.story.ui.listener.PresenterResultListener;
 import com.example.wr.story.ui.util.StoryItemUtil;
 import com.github.clans.fab.FloatingActionButton;
@@ -73,7 +74,10 @@ public class DetailActivity extends BaseActivity implements DetailContract.View 
         super.onCreate(savedInstanceState);
         int storyId = getIntent().getIntExtra(STORY_ID, -1);
         presenter.setStoryById(storyId);
-        adapter = new ThumbnailViewPagerAdapter(getSupportFragmentManager());
+        adapter = new ThumbnailViewPagerAdapter(getSupportFragmentManager(), (position -> {
+            Intent intent = GalleryActivity.getCallingIntent(DetailActivity.this, storyId, position);
+            startActivity(intent);
+        }));
         viewPager.setAdapter(adapter);
         currentDisplayMode = DisplayMode.ShowMode;
     }
@@ -86,11 +90,6 @@ public class DetailActivity extends BaseActivity implements DetailContract.View 
         dateTextView.setText(StoryItemUtil.getDateString(item.getDate()));
         adapter.setImagePathList(item.getImagePathList());
         adapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public ThumbnailViewPagerAdapter getThumbnailAdapter() {
-        return adapter;
     }
 
     @OnClick(R.id.detail_edit_fab)
