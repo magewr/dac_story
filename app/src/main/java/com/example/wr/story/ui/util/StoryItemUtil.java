@@ -20,6 +20,8 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import io.reactivex.Observable;
+
 /**
  * Created by WR.
  */
@@ -84,5 +86,21 @@ public class StoryItemUtil {
         catch (Exception e) {
             return BitmapFactory.decodeResource(App.getContext().getResources(), R.drawable.image_broken);
         }
+    }
+
+    public static Observable<Bitmap> getBitmapObservableFromImagePathList(List<String> stringList) {
+        Observable<Bitmap> observable = Observable.create(emitter -> {
+            try {
+                for (String path : stringList) {
+                    Bitmap bitmap = getBitmapFromImagePath(path);
+                    emitter.onNext(bitmap);
+                }
+                emitter.onComplete();
+            }
+            catch (Exception e) {
+                emitter.onError(e);
+            }
+        });
+        return observable;
     }
 }

@@ -6,21 +6,24 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import com.example.wr.story.R;
 import com.example.wr.story.data.local.dto.StoryDTO;
 import com.example.wr.story.di.module.ActivityModule;
 import com.example.wr.story.ui.base.BaseActivity;
-import com.example.wr.story.ui.content.detail.DetailActivity;
 import com.example.wr.story.ui.util.StoryItemUtil;
 import com.veinhorn.scrollgalleryview.MediaInfo;
 import com.veinhorn.scrollgalleryview.ScrollGalleryView;
 import com.veinhorn.scrollgalleryview.loader.DefaultImageLoader;
-import com.veinhorn.scrollgalleryview.loader.MediaLoader;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.observers.DefaultObserver;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by WR on 2018-01-08.
@@ -76,11 +79,26 @@ public class GalleryActivity extends BaseActivity implements GalleryContract.Vie
                 .setThumbnailSize(300)
                 .setZoom(true)
                 .setFragmentManager(getSupportFragmentManager());
-        for (String path :item.getImagePathList()) {
-            Bitmap bitmap = StoryItemUtil.getBitmapFromImagePath(path);
-            scrollGalleryView.addMedia(MediaInfo.mediaLoader(new DefaultImageLoader(bitmap)));
-        }
-        scrollGalleryView.setCurrentItem(clickedIndex);
+
+        StoryItemUtil.getBitmapObservableFromImagePathList(item.getImagePathList())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new DefaultObserver<Bitmap>() {
+                    @Override
+                    public void onNext(Bitmap bitmap) {
+                        scrollGalleryView.addMedia(MediaInfo.mediaLoader(new DefaultImageLoader(bitmap)));
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Toast.makeText(GalleryActivity.this, getString(R.string.error) + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        scrollGalleryView.setCurrentItem(clickedIndex);
+                    }
+                });
 
     }
 }
