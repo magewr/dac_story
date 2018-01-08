@@ -8,7 +8,6 @@ import com.example.wr.story.ui.base.BaseView;
 
 public interface SplashContract{
     interface View extends BaseView {
-        void moveToMainActivity();
         void loadSplashImage();
     }
 

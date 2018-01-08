@@ -37,6 +37,7 @@ buildscript {
 repositories {
     mavenCentral()
     maven { url 'https://maven.google.com' }
+    maven { url "https://jitpack.io" }
 }
 
 dependencies {
@@ -92,4 +93,7 @@ dependencies {
 
     //ScrollGalleryView
     implementation 'com.veinhorn.scrollgalleryview:library:1.0.6'
+
+    //TextSurface
+    implementation 'com.github.elevenetc:textsurface:0.9.1'
 }

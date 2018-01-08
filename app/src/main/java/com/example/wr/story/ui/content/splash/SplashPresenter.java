@@ -18,6 +18,5 @@ public class SplashPresenter extends Presenter<SplashContract.View> implements S
     public void onCreatePresenter() {
         super.onCreatePresenter();
         getView().loadSplashImage();
-        getView().moveToMainActivity();
     }
 }
