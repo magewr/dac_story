@@ -13,10 +13,9 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.wr.story.R;
 import com.example.wr.story.di.module.ActivityModule;
 import com.example.wr.story.ui.base.BaseActivity;
-import com.example.wr.story.ui.content.detail.DetailActivity;
 import com.example.wr.story.ui.content.main.adapter.StorySectionAdapter;
 import com.example.wr.story.ui.listener.HidingScrollListener;
-import com.example.wr.story.ui.util.StoryItemUtil;
+import com.example.wr.story.ui.util.Navigator;
 import com.github.clans.fab.FloatingActionMenu;
 
 import javax.inject.Inject;
@@ -110,7 +109,7 @@ public class MainActivity extends BaseActivity implements MainContract.View {
 
     @Override
     public void showDetailActivityByStoryId(int storyId) {
-        startActivity(DetailActivity.getCallingIntent(this, storyId));
+        Navigator.toDetailActivity(this, storyId);
     }
 
     @OnClick({R.id.add_new_story, R.id.add_sample_data})
