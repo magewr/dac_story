@@ -2,12 +2,9 @@ package com.example.wr.story.data.local;
 
 import com.example.wr.story.data.local.dto.StoryDTO;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -15,7 +12,7 @@ import javax.inject.Inject;
 
 import io.reactivex.Completable;
 import io.reactivex.Observable;
-import io.reactivex.Single;
+import io.reactivex.subjects.BehaviorSubject;
 
 /**
  * Created by WR.
@@ -27,13 +24,15 @@ public class LocalRepository {
     LocalRepository(){}
 
     static ArrayList<StoryDTO> storyList = new ArrayList<>();
+    private BehaviorSubject<List<StoryDTO>> itemListBehaviorSubject = BehaviorSubject.createDefault(storyList);
 
     public Observable<List<StoryDTO>> getStoryDTOList() {
-        Observable<List<StoryDTO>> sampleStoryDTOListObservable = Observable.create(emitter -> {
-            Collections.sort(storyList, (o1, o2) -> o2.getDate().compareTo(o1.getDate()));
-            emitter.onNext(storyList);
-        });
-        return sampleStoryDTOListObservable;
+        return itemListBehaviorSubject;
+    }
+
+    private List<StoryDTO> getSortedStoryList() {
+        Collections.sort(storyList, (o1, o2) -> o2.getDate().compareTo(o1.getDate()));
+        return storyList;
     }
 
     public Observable<StoryDTO> getStoryDTOById(int id) {
@@ -48,6 +47,7 @@ public class LocalRepository {
                 for (int i = 0 ; i < storyList.size() ; i++) {
                     if (storyList.get(i).getId() == newItem.getId()) {
                         storyList.set(i, newItem);
+                        itemListBehaviorSubject.onNext(getSortedStoryList());
                         emitter.onComplete();
                         return;
                     }
@@ -66,6 +66,7 @@ public class LocalRepository {
         Completable completable = Completable.create(emitter -> {
             try {
                 storyList.add(newItem);
+                itemListBehaviorSubject.onNext(getSortedStoryList());
                 emitter.onComplete();
             }
             catch (Exception e) {
@@ -80,6 +81,7 @@ public class LocalRepository {
         Completable completable = Completable.create(emitter -> {
             try {
                 storyList.remove(targetItem);
+                itemListBehaviorSubject.onNext(getSortedStoryList());
                 emitter.onComplete();
             }
             catch (Exception e) {
