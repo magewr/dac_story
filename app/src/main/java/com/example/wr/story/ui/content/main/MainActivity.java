@@ -116,6 +116,7 @@ public class MainActivity extends BaseActivity implements MainContract.View {
     public void onFabItemClick(View view) {
         switch (view.getId()) {
             case R.id.add_new_story:
+                Navigator.toAddActivity(this);
                 break;
 
             case R.id.add_sample_data:

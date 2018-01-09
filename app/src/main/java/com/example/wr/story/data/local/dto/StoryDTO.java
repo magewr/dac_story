@@ -22,7 +22,7 @@ public class StoryDTO {
     private Date date;
     private String title;
     private String memo;
-    private List<String> imagePathList;
+    private ArrayList<String> imagePathList;
 
     public StoryDTO(StoryDTO copyStoryDto) {
         this.id = copyStoryDto.id;

@@ -22,9 +22,11 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.content.main.MainActivity" />
-        <activity android:name=".ui.content.detail.gallery.GalleryActivity" />
-        <activity android:name=".ui.content.detail.DetailActivity"
-            android:windowSoftInputMode="adjustPan"/>
+        <activity android:name=".ui.content.gallery.GalleryActivity" />
+        <activity
+            android:name=".ui.content.detail.DetailActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity android:name=".ui.content.add.AddActivity"></activity>
     </application>
 
 </manifest>

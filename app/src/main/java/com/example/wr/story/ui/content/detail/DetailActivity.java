@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,16 +36,16 @@ public class DetailActivity extends BaseActivity implements DetailContract.View 
         return intent;
     }
 
-    @BindView(R.id.text_date)       TextView dateTextView;
-    @BindView(R.id.edit_title)      EditText titleEditText;
-    @BindView(R.id.edit_memo)       EditText memoEditText;
-    @BindView(R.id.detail_edit_fab) FloatingActionButton editFab;
-    @BindView(R.id.image_viewpager) ViewPager viewPager;
+    @BindView(R.id.text_date)       protected TextView dateTextView;
+    @BindView(R.id.edit_title)      protected EditText titleEditText;
+    @BindView(R.id.edit_memo)       protected EditText memoEditText;
+    @BindView(R.id.detail_edit_fab) protected FloatingActionButton editFab;
+    @BindView(R.id.image_viewpager) protected ViewPager viewPager;
 
-    @Inject    DetailPresenter presenter;
-    private    ThumbnailViewPagerAdapter adapter;
-    private    DisplayMode currentDisplayMode;
-    private    StoryDTO tempStoryItem;
+    @Inject       DetailPresenter presenter;
+    protected     ThumbnailViewPagerAdapter adapter;
+    private       DisplayMode currentDisplayMode;
+    private       StoryDTO tempStoryItem;
 
 
     @Override
@@ -67,13 +68,21 @@ public class DetailActivity extends BaseActivity implements DetailContract.View 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        currentDisplayMode = DisplayMode.ViewMode;
+        initOwnData();
+        initViewPager();
+        changeModeTo(getInitDisplayMode());
+    }
+
+    protected void initOwnData() {
         int storyId = getIntent().getIntExtra(STORY_ID, -1);
         presenter.setStoryById(storyId);
+    }
+
+    protected void initViewPager() {
         adapter = new ThumbnailViewPagerAdapter(getSupportFragmentManager(), currentDisplayMode, new OnItemClickListener() {
             @Override
             public void onClick(int position) {
-                Navigator.toGalleryActivity(DetailActivity.this, storyId, position);
+                Navigator.toGalleryActivity(DetailActivity.this, tempStoryItem.getImagePathList(), position);
             }
 
             @Override
@@ -90,12 +99,21 @@ public class DetailActivity extends BaseActivity implements DetailContract.View 
         viewPager.setAdapter(adapter);
     }
 
-    @Override
-    public void onBackPressed() {
+    protected DisplayMode getInitDisplayMode() {
+        return DisplayMode.ViewMode;
+    }
+
+    protected boolean handleOnBackPressed() {
         if (currentDisplayMode == DisplayMode.EditMode) {
             rollbackModifiedStory();
-            return;
+            return true;
         }
+        return false;
+    }
+    @Override
+    public void onBackPressed() {
+        if (handleOnBackPressed() == true)
+            return;
         super.onBackPressed();
     }
 
@@ -110,7 +128,7 @@ public class DetailActivity extends BaseActivity implements DetailContract.View 
     }
 
     @OnClick(R.id.detail_edit_fab)
-    void onEditFabClicked() {
+    protected void onEditFabClicked() {
         switch (currentDisplayMode) {
             case EditMode:
                 saveModifiedStory();
@@ -155,6 +173,7 @@ public class DetailActivity extends BaseActivity implements DetailContract.View 
                 memoEditText.setFocusable(true);
                 memoEditText.setFocusableInTouchMode(true);
                 editFab.setImageResource(R.drawable.done_white);
+                dateTextView.setVisibility(View.INVISIBLE);
                 break;
 
             case ViewMode:
@@ -162,6 +181,7 @@ public class DetailActivity extends BaseActivity implements DetailContract.View 
                 memoEditText.setFocusable(false);
                 memoEditText.setFocusableInTouchMode(false);
                 editFab.setImageResource(R.drawable.edit_white);
+                dateTextView.setVisibility(View.VISIBLE);
                 break;
         }
         adapter.onDisplayModeChanged(displayMode);

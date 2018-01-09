@@ -32,14 +32,8 @@ public class LocalRepository {
         Observable<List<StoryDTO>> sampleStoryDTOListObservable = Observable.create(emitter -> {
             Collections.sort(storyList, (o1, o2) -> o2.getDate().compareTo(o1.getDate()));
             emitter.onNext(storyList);
-//            emitter.onComplete();
         });
         return sampleStoryDTOListObservable;
-    }
-
-    public Observable<List<StoryDTO>> getSampleStoryDTOList() {
-        storyList.addAll(makeSampleStoryDTOList());
-        return getStoryDTOList();
     }
 
     public Observable<StoryDTO> getStoryDTOById(int id) {
@@ -66,6 +60,43 @@ public class LocalRepository {
         });
 
         return completable;
+    }
+
+    public Completable addStoryDTO(StoryDTO newItem) {
+        Completable completable = Completable.create(emitter -> {
+            try {
+                storyList.add(newItem);
+                emitter.onComplete();
+            }
+            catch (Exception e) {
+                emitter.onError(e);
+            }
+        });
+
+        return completable;
+    }
+
+    public Completable removeStoryDTO(StoryDTO targetItem) {
+        Completable completable = Completable.create(emitter -> {
+            try {
+                storyList.remove(targetItem);
+                emitter.onComplete();
+            }
+            catch (Exception e) {
+                emitter.onError(e);
+            }
+        });
+
+        return completable;
+    }
+
+
+    //////////////////////////////////////////////////////
+    //    샘플 데이터 제작용 메소드
+    //
+    public Observable<List<StoryDTO>> getSampleStoryDTOList() {
+        storyList.addAll(makeSampleStoryDTOList());
+        return getStoryDTOList();
     }
 
     private List<StoryDTO> makeSampleStoryDTOList() {

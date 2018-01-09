@@ -70,6 +70,7 @@
                     android:layout_marginTop="5dp"
                     android:ems="10"
                     android:enabled="false"
+                    android:hint="@string/detail_edittext_hint_title"
                     android:inputType="textPersonName"
                     android:textColor="@android:color/black" />
 
@@ -87,6 +88,7 @@
                     android:focusable="false"
                     android:focusableInTouchMode="false"
                     android:gravity="top|start"
+                    android:hint="@string/detail_edittext_hint_memo"
                     android:inputType="textMultiLine"
                     android:textColor="@android:color/black" />
 

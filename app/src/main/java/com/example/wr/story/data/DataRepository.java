@@ -43,4 +43,12 @@ public class DataRepository {
         return localRepository.updateStoryDTO(item);
     }
 
+    public Completable addStoryDto(StoryDTO item) {
+        return localRepository.addStoryDTO(item);
+    }
+
+    public Completable removeStoryDto(StoryDTO item) {
+        return localRepository.removeStoryDTO(item);
+    }
+
 }

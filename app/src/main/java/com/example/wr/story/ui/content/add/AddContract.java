@@ -1,21 +1,19 @@
-package com.example.wr.story.ui.content.detail.gallery;
+package com.example.wr.story.ui.content.add;
 
 import com.example.wr.story.data.local.dto.StoryDTO;
 import com.example.wr.story.ui.base.BaseView;
-import com.example.wr.story.ui.content.detail.adapter.ThumbnailViewPagerAdapter;
 import com.example.wr.story.ui.listener.PresenterResultListener;
 
 /**
  * Created by WR.
  */
 
-public interface GalleryContract {
+public interface AddContract {
 
     interface View extends BaseView {
-        void onGetStory(StoryDTO item);
     }
 
     interface Presenter {
-        void setStoryById(int storyId);
+        void onStoryItemModified(StoryDTO item, PresenterResultListener.OnSuccessListener onSuccessListener, PresenterResultListener.OnErrorListener onErrorListener);
     }
 }
