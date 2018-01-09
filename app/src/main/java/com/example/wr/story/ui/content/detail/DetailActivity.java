@@ -13,6 +13,8 @@ import com.example.wr.story.data.local.dto.StoryDTO;
 import com.example.wr.story.di.module.ActivityModule;
 import com.example.wr.story.ui.base.BaseActivity;
 import com.example.wr.story.ui.content.detail.adapter.ThumbnailViewPagerAdapter;
+import com.example.wr.story.ui.listener.OnItemClickListener;
+import com.example.wr.story.ui.listener.OnStoryDisplayModeChangedListener.DisplayMode;
 import com.example.wr.story.ui.listener.PresenterResultListener;
 import com.example.wr.story.ui.util.Navigator;
 import com.example.wr.story.ui.util.StoryItemUtil;
@@ -40,16 +42,12 @@ public class DetailActivity extends BaseActivity implements DetailContract.View 
     @BindView(R.id.detail_edit_fab) FloatingActionButton editFab;
     @BindView(R.id.image_viewpager) ViewPager viewPager;
 
-    @Inject
-    DetailPresenter presenter;
+    @Inject    DetailPresenter presenter;
+    private    ThumbnailViewPagerAdapter adapter;
+    private    DisplayMode currentDisplayMode;
+    private    StoryDTO originalStoryItem;
+    private    StoryDTO tempStoryItem;
 
-    enum DisplayMode {
-        EditMode,
-        ShowMode,
-    }
-    private DisplayMode currentDisplayMode;
-    private StoryDTO storyItem;
-    private ThumbnailViewPagerAdapter adapter;
 
     @Override
     protected int getLayoutId() {
@@ -71,22 +69,47 @@ public class DetailActivity extends BaseActivity implements DetailContract.View 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        currentDisplayMode = DisplayMode.ShowMode;
         int storyId = getIntent().getIntExtra(STORY_ID, -1);
         presenter.setStoryById(storyId);
-        adapter = new ThumbnailViewPagerAdapter(getSupportFragmentManager(), (position -> {
-            Navigator.toGalleryActivity(this, storyId, position);
-        }));
+        adapter = new ThumbnailViewPagerAdapter(getSupportFragmentManager(), currentDisplayMode, new OnItemClickListener() {
+            @Override
+            public void onClick(int position) {
+                Navigator.toGalleryActivity(DetailActivity.this, storyId, position);
+            }
+
+            @Override
+            public void onRemoveItemClick(int position) {
+                tempStoryItem.getImagePathList().remove(position);
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onAddItemClick() {
+
+            }
+        });
         viewPager.setAdapter(adapter);
-        currentDisplayMode = DisplayMode.ShowMode;
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (currentDisplayMode == DisplayMode.EditMode) {
+            currentDisplayMode = DisplayMode.ShowMode;
+            changeModeToShowMode(false);
+            return;
+        }
+        super.onBackPressed();
     }
 
     @Override
     public void onGetStory(StoryDTO item) {
-        this.storyItem = item;
-        titleEditText.setText(item.getTitle());
-        memoEditText.setText(item.getMemo());
-        dateTextView.setText(StoryItemUtil.getDateString(item.getDate()));
-        adapter.setImagePathList(item.getImagePathList());
+        this.originalStoryItem = item;
+        tempStoryItem = new StoryDTO(originalStoryItem);
+        titleEditText.setText(tempStoryItem.getTitle());
+        memoEditText.setText(tempStoryItem.getMemo());
+        dateTextView.setText(StoryItemUtil.getDateString(tempStoryItem.getDate()));
+        adapter.setImagePathList(tempStoryItem.getImagePathList());
         adapter.notifyDataSetChanged();
     }
 
@@ -94,12 +117,12 @@ public class DetailActivity extends BaseActivity implements DetailContract.View 
     void onEditFabClicked() {
         switch (currentDisplayMode) {
             case EditMode:
-                changeModeToShowMode();
                 currentDisplayMode = DisplayMode.ShowMode;
+                changeModeToShowMode(true);
                 break;
             case ShowMode:
-                changeModeToEditMode();
                 currentDisplayMode = DisplayMode.EditMode;
+                changeModeToEditMode();
                 break;
         }
     }
@@ -109,28 +132,42 @@ public class DetailActivity extends BaseActivity implements DetailContract.View 
         memoEditText.setFocusable(true);
         memoEditText.setFocusableInTouchMode(true);
         editFab.setImageResource(R.drawable.done_white);
+        adapter.onDisplayModeChanged(currentDisplayMode);
     }
 
-    private void changeModeToShowMode() {
+    private void changeModeToShowMode(boolean needSave) {
         titleEditText.setEnabled(false);
         memoEditText.setFocusable(false);
         memoEditText.setFocusableInTouchMode(false);
         editFab.setImageResource(R.drawable.edit_white);
 
-        storyItem.setDate(new Date());
-        storyItem.setTitle(titleEditText.getText().toString());
-        storyItem.setMemo(memoEditText.getText().toString());
+        if (needSave) {
+            tempStoryItem.setDate(new Date());
+            tempStoryItem.setTitle(titleEditText.getText().toString());
+            tempStoryItem.setMemo(memoEditText.getText().toString());
 
-        presenter.onStoryItemModified(storyItem, new PresenterResultListener() {
-            @Override
-            public void onSuccess() {
-                Toast.makeText(DetailActivity.this, getString(R.string.detail_toast_modify_success), Toast.LENGTH_SHORT).show();
-            }
+            presenter.onStoryItemModified(tempStoryItem, new PresenterResultListener() {
+                @Override
+                public void onSuccess() {
+                    Toast.makeText(DetailActivity.this, getString(R.string.detail_toast_modify_success), Toast.LENGTH_SHORT).show();
+                    originalStoryItem = tempStoryItem;
+                    tempStoryItem = new StoryDTO(originalStoryItem);
+                    adapter.setImagePathList(tempStoryItem.getImagePathList());
+                    adapter.notifyDataSetChanged();
+                }
 
-            @Override
-            public void onError(String errorMessage) {
-                Toast.makeText(DetailActivity.this, getString(R.string.detail_toast_modify_error) + errorMessage, Toast.LENGTH_SHORT).show();
-            }
-        });
+                @Override
+                public void onError(String errorMessage) {
+                    Toast.makeText(DetailActivity.this, getString(R.string.detail_toast_modify_error) + errorMessage, Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+        else {
+            tempStoryItem = new StoryDTO(originalStoryItem);
+            adapter.setImagePathList(tempStoryItem.getImagePathList());
+            titleEditText.setText(tempStoryItem.getTitle());
+            memoEditText.setText(tempStoryItem.getMemo());
+        }
+        adapter.onDisplayModeChanged(currentDisplayMode);
     }
 }

@@ -6,4 +6,6 @@ package com.example.wr.story.ui.listener;
 
 public interface OnItemClickListener {
     void onClick(int position);
+    void onRemoveItemClick(int position);
+    void onAddItemClick();
 }

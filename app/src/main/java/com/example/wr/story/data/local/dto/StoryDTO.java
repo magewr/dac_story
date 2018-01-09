@@ -1,5 +1,6 @@
 package com.example.wr.story.data.local.dto;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -22,4 +23,13 @@ public class StoryDTO {
     private String title;
     private String memo;
     private List<String> imagePathList;
+
+    public StoryDTO(StoryDTO copyStoryDto) {
+        this.id = copyStoryDto.id;
+        this.date = copyStoryDto.date;
+        this.title = copyStoryDto.title;
+        this.memo = copyStoryDto.memo;
+        this.imagePathList = new ArrayList<>(copyStoryDto.imagePathList);
+
+    }
 }
