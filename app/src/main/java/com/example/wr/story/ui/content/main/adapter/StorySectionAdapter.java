@@ -27,7 +27,9 @@ public class StorySectionAdapter extends BaseSectionQuickAdapter<StorySection, B
     @Override
     protected void convert(BaseViewHolder helper, StorySection item) {
         helper.setText(R.id.story_content_title, item.t.getTitle());
+        helper.setText(R.id.story_content_date, StoryItemUtil.getSimpleDateString(item.t.getDate()));
         String imagePath = item.t.getImagePathList().get(0);
         StoryItemUtil.setThumbnailImageByGlide(imagePath, helper.getView(R.id.story_content_image));
+        helper.addOnClickListener(R.id.story_content_remove_image);
     }
 }

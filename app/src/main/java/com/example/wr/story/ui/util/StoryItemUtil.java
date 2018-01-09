@@ -1,6 +1,5 @@
 package com.example.wr.story.ui.util;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.widget.ImageView;
@@ -16,9 +15,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import javax.inject.Inject;
-import javax.inject.Singleton;
 
 import io.reactivex.Observable;
 
@@ -47,6 +43,11 @@ public class StoryItemUtil {
 
     public static String getDateString(Date date) {
         SimpleDateFormat df = new SimpleDateFormat("yyyy년 MM월 dd일 E요일 a hh시 mm분 ss초");
+        return df.format(date);
+    }
+
+    public static String getSimpleDateString(Date date) {
+        SimpleDateFormat df = new SimpleDateFormat("M/d E a h:mm");
         return df.format(date);
     }
 

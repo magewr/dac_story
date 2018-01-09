@@ -8,6 +8,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.wr.story.R;
@@ -22,6 +23,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+
 
 /**
  * Created by WR.
@@ -90,8 +92,16 @@ public class MainActivity extends BaseActivity implements MainContract.View {
         adapter = new StorySectionAdapter(R.layout.recyclerview_story_item_content, R.layout.recyclerview_story_section_header, null);
         adapter.openLoadAnimation();
         adapter.setEmptyView(R.layout.recyclerview_noitem_bg, (ViewGroup)storyRecyclerView.getParent());
-        adapter.setOnItemClickListener((BaseQuickAdapter adapter, View view, int position)
-                -> presenter.onStoryItemSelected(position));
+        adapter.setOnItemClickListener((BaseQuickAdapter adapter, View view, int position) ->
+                presenter.onStoryItemSelected(position));
+        adapter.setOnItemChildClickListener((adapter1, view, position) -> {
+            presenter.removeStoryItem(position, () ->  {
+                presenter.getStoryList();
+                Toast.makeText(this, getString(R.string.main_toast_remove_success), Toast.LENGTH_SHORT).show();
+                },
+                    error -> Toast.makeText(this, getString(R.string.main_toast_remove_error) + error, Toast.LENGTH_SHORT).show()
+            );
+        });
         storyRecyclerView.setAdapter(adapter);
         storyRecyclerView.clearOnScrollListeners();
         storyRecyclerView.addOnScrollListener(new HidingScrollListener() {

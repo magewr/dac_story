@@ -86,7 +86,6 @@ public class LocalRepository {
                 emitter.onError(e);
             }
         });
-
         return completable;
     }
 
