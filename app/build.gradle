@@ -82,6 +82,9 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.3.1'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.3.1'
 
+    //Mockito
+    implementation "org.mockito:mockito-core:2.+"
+
     //////////////////////////////////////
     //View Open Source
 
