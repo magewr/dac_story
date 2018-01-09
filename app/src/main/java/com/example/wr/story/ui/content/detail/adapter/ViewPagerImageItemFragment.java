@@ -59,7 +59,7 @@ public class ViewPagerImageItemFragment extends Fragment {
         ButterKnife.bind(this, view);
 
         switch (displayMode) {
-            case ShowMode:
+            case ViewMode:
                 view.setOnClickListener((v) -> onClickListener.onClick(position));
                 removeImageView.setVisibility(View.GONE);
                 break;

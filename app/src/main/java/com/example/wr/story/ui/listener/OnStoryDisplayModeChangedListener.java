@@ -7,7 +7,7 @@ package com.example.wr.story.ui.listener;
 public interface OnStoryDisplayModeChangedListener {
     enum DisplayMode {
         EditMode,
-        ShowMode,
+        ViewMode,
     }
 
     void onDisplayModeChanged (DisplayMode displayMode);

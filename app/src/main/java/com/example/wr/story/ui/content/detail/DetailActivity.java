@@ -15,7 +15,6 @@ import com.example.wr.story.ui.base.BaseActivity;
 import com.example.wr.story.ui.content.detail.adapter.ThumbnailViewPagerAdapter;
 import com.example.wr.story.ui.listener.OnItemClickListener;
 import com.example.wr.story.ui.listener.OnStoryDisplayModeChangedListener.DisplayMode;
-import com.example.wr.story.ui.listener.PresenterResultListener;
 import com.example.wr.story.ui.util.Navigator;
 import com.example.wr.story.ui.util.StoryItemUtil;
 import com.github.clans.fab.FloatingActionButton;
@@ -45,7 +44,6 @@ public class DetailActivity extends BaseActivity implements DetailContract.View 
     @Inject    DetailPresenter presenter;
     private    ThumbnailViewPagerAdapter adapter;
     private    DisplayMode currentDisplayMode;
-    private    StoryDTO originalStoryItem;
     private    StoryDTO tempStoryItem;
 
 
@@ -69,7 +67,7 @@ public class DetailActivity extends BaseActivity implements DetailContract.View 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        currentDisplayMode = DisplayMode.ShowMode;
+        currentDisplayMode = DisplayMode.ViewMode;
         int storyId = getIntent().getIntExtra(STORY_ID, -1);
         presenter.setStoryById(storyId);
         adapter = new ThumbnailViewPagerAdapter(getSupportFragmentManager(), currentDisplayMode, new OnItemClickListener() {
@@ -95,17 +93,15 @@ public class DetailActivity extends BaseActivity implements DetailContract.View 
     @Override
     public void onBackPressed() {
         if (currentDisplayMode == DisplayMode.EditMode) {
-            currentDisplayMode = DisplayMode.ShowMode;
-            changeModeToShowMode(false);
+            rollbackModifiedStory();
             return;
         }
         super.onBackPressed();
     }
 
     @Override
-    public void onGetStory(StoryDTO item) {
-        this.originalStoryItem = item;
-        tempStoryItem = new StoryDTO(originalStoryItem);
+    public void onGetStory() {
+        tempStoryItem = presenter.copyDetailStoryItem();
         titleEditText.setText(tempStoryItem.getTitle());
         memoEditText.setText(tempStoryItem.getMemo());
         dateTextView.setText(StoryItemUtil.getDateString(tempStoryItem.getDate()));
@@ -117,57 +113,58 @@ public class DetailActivity extends BaseActivity implements DetailContract.View 
     void onEditFabClicked() {
         switch (currentDisplayMode) {
             case EditMode:
-                currentDisplayMode = DisplayMode.ShowMode;
-                changeModeToShowMode(true);
+                saveModifiedStory();
                 break;
-            case ShowMode:
-                currentDisplayMode = DisplayMode.EditMode;
-                changeModeToEditMode();
+            case ViewMode:
+                changeModeTo(DisplayMode.EditMode);
                 break;
         }
     }
 
-    private void changeModeToEditMode() {
-        titleEditText.setEnabled(true);
-        memoEditText.setFocusable(true);
-        memoEditText.setFocusableInTouchMode(true);
-        editFab.setImageResource(R.drawable.done_white);
-        adapter.onDisplayModeChanged(currentDisplayMode);
-    }
+    private void saveModifiedStory () {
+        tempStoryItem.setDate(new Date());
+        tempStoryItem.setTitle(titleEditText.getText().toString());
+        tempStoryItem.setMemo(memoEditText.getText().toString());
 
-    private void changeModeToShowMode(boolean needSave) {
-        titleEditText.setEnabled(false);
-        memoEditText.setFocusable(false);
-        memoEditText.setFocusableInTouchMode(false);
-        editFab.setImageResource(R.drawable.edit_white);
-
-        if (needSave) {
-            tempStoryItem.setDate(new Date());
-            tempStoryItem.setTitle(titleEditText.getText().toString());
-            tempStoryItem.setMemo(memoEditText.getText().toString());
-
-            presenter.onStoryItemModified(tempStoryItem, new PresenterResultListener() {
-                @Override
-                public void onSuccess() {
-                    Toast.makeText(DetailActivity.this, getString(R.string.detail_toast_modify_success), Toast.LENGTH_SHORT).show();
-                    originalStoryItem = tempStoryItem;
-                    tempStoryItem = new StoryDTO(originalStoryItem);
-                    adapter.setImagePathList(tempStoryItem.getImagePathList());
-                    adapter.notifyDataSetChanged();
-                }
-
-                @Override
-                public void onError(String errorMessage) {
-                    Toast.makeText(DetailActivity.this, getString(R.string.detail_toast_modify_error) + errorMessage, Toast.LENGTH_SHORT).show();
-                }
-            });
-        }
-        else {
-            tempStoryItem = new StoryDTO(originalStoryItem);
+        presenter.onStoryItemModified(tempStoryItem, () ->  {
+            Toast.makeText(DetailActivity.this, getString(R.string.detail_toast_modify_success), Toast.LENGTH_SHORT).show();
+            tempStoryItem = presenter.copyDetailStoryItem();
             adapter.setImagePathList(tempStoryItem.getImagePathList());
-            titleEditText.setText(tempStoryItem.getTitle());
-            memoEditText.setText(tempStoryItem.getMemo());
-        }
-        adapter.onDisplayModeChanged(currentDisplayMode);
+            changeModeTo(DisplayMode.ViewMode);
+        }, (errorMessage) -> {
+                Toast.makeText(DetailActivity.this, getString(R.string.detail_toast_modify_error) + errorMessage, Toast.LENGTH_SHORT).show();
+        });
     }
+
+    private void rollbackModifiedStory() {
+        tempStoryItem = presenter.copyDetailStoryItem();
+        adapter.setImagePathList(tempStoryItem.getImagePathList());
+        titleEditText.setText(tempStoryItem.getTitle());
+        memoEditText.setText(tempStoryItem.getMemo());
+        changeModeTo(DisplayMode.ViewMode);
+    }
+
+    private void changeModeTo (DisplayMode displayMode) {
+        if (displayMode == currentDisplayMode)
+            return;
+
+        currentDisplayMode = displayMode;
+        switch (displayMode) {
+            case EditMode:
+                titleEditText.setEnabled(true);
+                memoEditText.setFocusable(true);
+                memoEditText.setFocusableInTouchMode(true);
+                editFab.setImageResource(R.drawable.done_white);
+                break;
+
+            case ViewMode:
+                titleEditText.setEnabled(false);
+                memoEditText.setFocusable(false);
+                memoEditText.setFocusableInTouchMode(false);
+                editFab.setImageResource(R.drawable.edit_white);
+                break;
+        }
+        adapter.onDisplayModeChanged(displayMode);
+    }
+
 }

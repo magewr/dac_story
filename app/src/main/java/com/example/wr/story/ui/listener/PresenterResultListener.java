@@ -5,6 +5,11 @@ package com.example.wr.story.ui.listener;
  */
 
 public interface PresenterResultListener {
-    void onSuccess();
-    void onError(String errorMessage);
+    interface OnSuccessListener{
+        void onSuccess();
+    }
+
+    interface OnErrorListener {
+        void onError(String errorMessage);
+    }
 }

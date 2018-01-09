@@ -17,8 +17,9 @@ import io.reactivex.observers.DisposableObserver;
 
 public class DetailPresenter extends Presenter<DetailContract.View> implements DetailContract.Presenter  {
 
-    GetStoryById getStoryById;
-    UpdateStory updateStory;
+    private GetStoryById getStoryById;
+    private UpdateStory updateStory;
+    private StoryDTO detailStoryItem;
 
     @Inject
     DetailPresenter(GetStoryById getStoryById, UpdateStory updateStory){
@@ -36,7 +37,8 @@ public class DetailPresenter extends Presenter<DetailContract.View> implements D
         getStoryById.execute(new DisposableObserver<StoryDTO>() {
             @Override
             public void onNext(StoryDTO storyDTO) {
-                getView().onGetStory(storyDTO);
+                detailStoryItem = storyDTO;
+                getView().onGetStory();
             }
 
             @Override
@@ -52,17 +54,23 @@ public class DetailPresenter extends Presenter<DetailContract.View> implements D
     }
 
     @Override
-    public void onStoryItemModified(StoryDTO item, PresenterResultListener listener) {
+    public void onStoryItemModified(StoryDTO item, PresenterResultListener.OnSuccessListener onSuccessListener, PresenterResultListener.OnErrorListener onErrorListener) {
         updateStory.execute(new DisposableCompletableObserver() {
             @Override
             public void onComplete() {
-                listener.onSuccess();
+                detailStoryItem = item;
+                onSuccessListener.onSuccess();
             }
 
             @Override
             public void onError(Throwable e) {
-                listener.onError(e.getMessage());
+                onErrorListener.onError(e.getMessage());
             }
         }, item);
+    }
+
+    @Override
+    public StoryDTO copyDetailStoryItem() {
+        return new StoryDTO(detailStoryItem);
     }
 }
