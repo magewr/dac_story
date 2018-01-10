@@ -97,10 +97,12 @@ public class MainActivity extends BaseActivity implements MainContract.View, App
         adapter.setOnItemClickListener((BaseQuickAdapter adapter, View view, int position) ->
                 presenter.onStoryItemSelected(position));
         adapter.setOnItemChildClickListener((adapter1, view, position) -> {
-            presenter.removeStoryItem(position,
-                    () -> Toast.makeText(this, getString(R.string.main_toast_remove_success), Toast.LENGTH_SHORT).show(),
-                error -> Toast.makeText(this, getString(R.string.main_toast_remove_error) + error, Toast.LENGTH_SHORT).show()
-            );
+            presenter.removeStoryItem(position, (isSuccess, msg) -> {
+                if (isSuccess)
+                    Toast.makeText(this, getString(R.string.main_toast_remove_success), Toast.LENGTH_SHORT).show();
+                else
+                    Toast.makeText(this, getString(R.string.main_toast_remove_error) + msg, Toast.LENGTH_SHORT).show();
+            });
         });
         storyRecyclerView.setAdapter(adapter);
         storyRecyclerView.clearOnScrollListeners();

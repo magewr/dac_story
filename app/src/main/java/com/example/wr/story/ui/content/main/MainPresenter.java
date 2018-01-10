@@ -62,17 +62,17 @@ public class MainPresenter extends Presenter<MainContract.View> implements MainC
     }
 
     @Override
-    public void removeStoryItem(int position, PresenterResultListener.OnSuccessListener successListener, PresenterResultListener.OnErrorListener errorListener) {
+    public void removeStoryItem(int position, PresenterResultListener listener) {
         StoryDTO targetItem = getView().getRecyclerViewAdapter().getData().get(position).t;
         removeStory.execute(new DisposableCompletableObserver() {
             @Override
             public void onComplete() {
-                successListener.onSuccess();
+                listener.onResult(true, null);
             }
 
             @Override
             public void onError(Throwable e) {
-                errorListener.onError(e.getMessage());
+                listener.onResult(false, e.getMessage());
             }
         }, targetItem);
     }

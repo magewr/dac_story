@@ -14,6 +14,6 @@ public interface CameraContract {
     }
 
     interface Presenter {
-        void savePicture(String imagePath, final byte[] data, PresenterResultListener.OnSuccessListener successListener, PresenterResultListener.OnErrorListener errorListener);
+        void savePicture(String imagePath, final byte[] data, PresenterResultListener listener);
     }
 }

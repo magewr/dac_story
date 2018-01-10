@@ -22,17 +22,17 @@ public class CameraPresenter extends Presenter<CameraContract.View> implements C
     }
 
     @Override
-    public void savePicture(String imagePath, byte[] data, PresenterResultListener.OnSuccessListener successListener, PresenterResultListener.OnErrorListener errorListener) {
+    public void savePicture(String imagePath, byte[] data, PresenterResultListener listener) {
         savePicture.execute(new DisposableSingleObserver<String>() {
             @Override
             public void onSuccess(String imagePath) {
                 getView().onSavePicture(imagePath);
-                successListener.onSuccess();
+                listener.onResult(true, null);
             }
 
             @Override
             public void onError(Throwable e) {
-                errorListener.onError(e.getMessage());
+                listener.onResult(false, e.getMessage());
             }
         }, SavePicture.Params.makeParams(imagePath, data));
     }

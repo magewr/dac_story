@@ -4,7 +4,10 @@ import com.example.wr.story.data.local.dto.StoryDTO;
 import com.example.wr.story.interactor.GetStoryById;
 import com.example.wr.story.interactor.UpdateStory;
 import com.example.wr.story.ui.base.Presenter;
+import com.example.wr.story.ui.exception.NoPictureException;
 import com.example.wr.story.ui.listener.PresenterResultListener;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -50,23 +53,29 @@ public class DetailPresenter extends Presenter<DetailContract.View> implements D
     }
 
     @Override
-    public void onStoryItemModified(StoryDTO item, PresenterResultListener.OnSuccessListener onSuccessListener, PresenterResultListener.OnErrorListener onErrorListener) {
+    public void updateStory(StoryDTO item, PresenterResultListener listener) {
         if (item.getImagePathList().size() == 0) {
-            onErrorListener.onError(new IllegalStateException("no pictures").getMessage());
+            listener.onResult(false, new NoPictureException().getMessage());
             return;
         }
         updateStory.execute(new DisposableCompletableObserver() {
             @Override
             public void onComplete() {
                 detailStoryItem = item;
-                onSuccessListener.onSuccess();
+                listener.onResult(true, null);
             }
 
             @Override
             public void onError(Throwable e) {
-                onErrorListener.onError(e.getMessage());
+                listener.onResult(true, e.getMessage());
             }
         }, item);
+    }
+
+    @Override
+    public void onPictureAdded(List<String> imagePath) {
+        getView().getThumbnailAdapter().addImagePathList(imagePath);
+        getView().getThumbnailAdapter().notifyDataSetChanged();
     }
 
     @Override

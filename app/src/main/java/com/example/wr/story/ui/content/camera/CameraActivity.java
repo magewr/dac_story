@@ -108,9 +108,12 @@ public class CameraActivity extends BaseActivity implements CameraContract.View{
         @Override
         public void onPictureTaken(CameraView cameraView, byte[] data) {
             final String fileName = getPictureDirectory() + StoryItemUtil.getDateStringForFIle(new Date());
-            presenter.savePicture(fileName, data, () -> {}, errorMessage ->
-                    Toast.makeText(CameraActivity.this, getString(R.string.camera_toast_save_error), Toast.LENGTH_SHORT).show()
-            );
+            presenter.savePicture(fileName, data, (isSuccess, msg) -> {
+                if (isSuccess)
+                    ;
+                else
+                    Toast.makeText(CameraActivity.this, getString(R.string.camera_toast_save_error), Toast.LENGTH_SHORT).show();
+            });
         }
     };
 

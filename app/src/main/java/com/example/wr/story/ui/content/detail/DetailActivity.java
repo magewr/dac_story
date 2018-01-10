@@ -130,10 +130,14 @@ public class DetailActivity extends BaseActivity implements DetailContract.View 
         if (resultCode == RESULT_OK) {
             ArrayList<String> pathListFromCamera = data.getStringArrayListExtra(RESULT_IMAGE_LIST_KEY);
             if (pathListFromCamera != null) {
-                adapter.addImagePathList(pathListFromCamera);
-                adapter.notifyDataSetChanged();
+                presenter.onPictureAdded(pathListFromCamera);
             }
         }
+    }
+
+    @Override
+    public ThumbnailViewPagerAdapter getThumbnailAdapter() {
+        return adapter;
     }
 
     @Override
@@ -163,13 +167,15 @@ public class DetailActivity extends BaseActivity implements DetailContract.View 
         tempStoryItem.setTitle(titleEditText.getText().toString());
         tempStoryItem.setMemo(memoEditText.getText().toString());
 
-        presenter.onStoryItemModified(tempStoryItem, () ->  {
-            Toast.makeText(DetailActivity.this, getString(R.string.detail_toast_modify_success), Toast.LENGTH_SHORT).show();
-            tempStoryItem = presenter.copyDetailStoryItem();
-            adapter.setImagePathList(tempStoryItem.getImagePathList());
-            changeModeTo(DisplayMode.ViewMode);
-        }, (errorMessage) -> {
-                Toast.makeText(DetailActivity.this, getString(R.string.detail_toast_modify_error) + errorMessage, Toast.LENGTH_SHORT).show();
+        presenter.updateStory(tempStoryItem, (isSuccess, msg) -> {
+            if (isSuccess) {
+                Toast.makeText(DetailActivity.this, getString(R.string.detail_toast_modify_success), Toast.LENGTH_SHORT).show();
+                tempStoryItem = presenter.copyDetailStoryItem();
+                adapter.setImagePathList(tempStoryItem.getImagePathList());
+                changeModeTo(DisplayMode.ViewMode);
+            }
+            else
+                Toast.makeText(DetailActivity.this, getString(R.string.detail_toast_modify_error) + msg, Toast.LENGTH_SHORT).show();
         });
     }
 

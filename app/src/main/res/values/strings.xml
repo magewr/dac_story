@@ -9,16 +9,15 @@
     <string name="main_fab_add_sample_data">샘플 데이터 추가</string>
     <string name="main_fab_add_new_story">새 스토리 추가</string>
     <string name="main_toast_remove_success">삭제되었습니다.</string>
-    <string name="main_toast_remove_error">삭제 실패</string>
+    <string name="main_toast_remove_error">삭제 실패 : </string>
 
     <string name="detail_edittext_hint_title">제목</string>
     <string name="detail_edittext_hint_memo">메모</string>
-    <string name="detail_toast_modify_error_no_picture">수정되었습니다.</string>
     <string name="detail_toast_modify_success">수정되었습니다.</string>
-    <string name="detail_toast_modify_error">수정 실패</string>
+    <string name="detail_toast_modify_error">수정 실패 : </string>
     <string name="detail_toast_add_success">생성되었습니다.</string>
-    <string name="detail_toast_add_error">생성 실패</string>
+    <string name="detail_toast_add_error">생성 실패 : </string>
 
     <string name="camera_toast_request_permission">권한이 필요합니다. 권한 설정을 해주세요.</string>
-    <string name="camera_toast_save_error">저장 실패</string>
+    <string name="camera_toast_save_error">저장 실패 : </string>
 </resources>

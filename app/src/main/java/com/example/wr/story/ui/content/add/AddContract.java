@@ -14,6 +14,6 @@ public interface AddContract {
     }
 
     interface Presenter {
-        void onStoryItemModified(StoryDTO item, PresenterResultListener.OnSuccessListener onSuccessListener, PresenterResultListener.OnErrorListener onErrorListener);
+        void onStoryItemModified(StoryDTO item, PresenterResultListener listener);
     }
 }

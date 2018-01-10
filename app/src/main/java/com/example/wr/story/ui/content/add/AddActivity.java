@@ -65,11 +65,13 @@ public class AddActivity extends DetailActivity {
         newItem.setId(newItem.getDate().getTime());
         newItem.setTitle(titleEditText.getText().toString());
         newItem.setMemo(memoEditText.getText().toString());
-        presenter.onStoryItemModified(newItem, () -> {
-            Toast.makeText(this, getString(R.string.detail_toast_add_success), Toast.LENGTH_SHORT).show();
-            finish();
-        }, errorMessage -> {
-            Toast.makeText(this, getString(R.string.detail_toast_add_error) + errorMessage, Toast.LENGTH_SHORT).show();
+        presenter.onStoryItemModified(newItem, (isSuccess, msg) -> {
+            if (isSuccess) {
+                Toast.makeText(this, getString(R.string.detail_toast_add_success), Toast.LENGTH_SHORT).show();
+                finish();
+            }
+            else
+                Toast.makeText(this, getString(R.string.detail_toast_add_error) + msg, Toast.LENGTH_SHORT).show();
         });
     }
 }
