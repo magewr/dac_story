@@ -4,6 +4,7 @@
     <string name="error">에러발생 : </string>
 
     <string name="main_recyclerview_no_item_message">스토리가 아직 없어요!</string>
+    <string name="main_search_hint">검색</string>
 
     <string name="main_fab_add_sample_data">샘플 데이터 추가</string>
     <string name="main_fab_add_new_story">새 스토리 추가</string>

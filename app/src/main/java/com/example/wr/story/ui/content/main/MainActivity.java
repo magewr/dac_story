@@ -4,12 +4,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.arlib.floatingsearchview.FloatingSearchView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.wr.story.R;
 import com.example.wr.story.di.module.ActivityModule;
@@ -29,7 +31,7 @@ import butterknife.OnClick;
  * Created by WR.
  */
 
-public class MainActivity extends BaseActivity implements MainContract.View {
+public class MainActivity extends BaseActivity implements MainContract.View, AppBarLayout.OnOffsetChangedListener {
 
     public static Intent getCallingIntent(Context context) {
         Intent intent = new Intent(context, MainActivity.class);
@@ -38,16 +40,13 @@ public class MainActivity extends BaseActivity implements MainContract.View {
         return intent;
     }
 
-    @Inject
-    MainPresenter presenter;
-
+    @Inject MainPresenter presenter;
     private StorySectionAdapter adapter;
 
-    @BindView(R.id.story_recyclerview)
-    RecyclerView storyRecyclerView;
-
-    @BindView(R.id.fab_menu)
-    FloatingActionMenu fabMenu;
+    @BindView(R.id.story_recyclerview)      RecyclerView storyRecyclerView;
+    @BindView(R.id.fab_menu)                FloatingActionMenu fabMenu;
+    @BindView(R.id.floating_search_view)    FloatingSearchView mSearchView;
+    @BindView(R.id.appbar)                  AppBarLayout mAppBar;
 
     @Override
     protected int getLayoutId() {
@@ -70,6 +69,8 @@ public class MainActivity extends BaseActivity implements MainContract.View {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initRecyclerView();
+        fabMenu.setClosedOnTouchOutside(true);
+        mAppBar.addOnOffsetChangedListener(this);
     }
 
     @Override
@@ -132,5 +133,10 @@ public class MainActivity extends BaseActivity implements MainContract.View {
                 break;
         }
         fabMenu.close(true);
+    }
+
+    @Override
+    public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+        mSearchView.setTranslationY(verticalOffset);
     }
 }

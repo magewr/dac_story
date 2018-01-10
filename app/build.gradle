@@ -99,4 +99,7 @@ dependencies {
 
     //TextSurface
     implementation 'com.github.elevenetc:textsurface:0.9.1'
+
+    //FloatingSearchView
+    implementation 'com.github.arimorty:floatingsearchview:2.1.1'
 }
