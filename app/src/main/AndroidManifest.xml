@@ -14,19 +14,28 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.content.splash.SplashActivity">
+        <activity
+            android:name=".ui.content.splash.SplashActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.content.main.MainActivity" />
-        <activity android:name=".ui.content.gallery.GalleryActivity" />
+        <activity
+            android:name=".ui.content.main.MainActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".ui.content.gallery.GalleryActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".ui.content.detail.DetailActivity"
-            android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".ui.content.add.AddActivity"></activity>
+            android:windowSoftInputMode="adjustPan"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".ui.content.add.AddActivity"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>
