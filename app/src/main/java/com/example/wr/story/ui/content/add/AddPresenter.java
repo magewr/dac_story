@@ -30,6 +30,10 @@ public class AddPresenter extends Presenter<AddContract.View> implements AddCont
 
     @Override
     public void onStoryItemModified(StoryDTO item, PresenterResultListener.OnSuccessListener onSuccessListener, PresenterResultListener.OnErrorListener onErrorListener) {
+        if (item.getImagePathList().size() == 0) {
+            onErrorListener.onError(new IllegalStateException("no pictures").getMessage());
+            return;
+        }
         addStory.execute(new DisposableCompletableObserver() {
             @Override
             public void onComplete() {

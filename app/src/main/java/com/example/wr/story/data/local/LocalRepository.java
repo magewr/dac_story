@@ -1,10 +1,12 @@
 package com.example.wr.story.data.local;
 
+import com.example.wr.story.data.local.dao.RealmString;
+import com.example.wr.story.data.local.dao.StoryDAO;
 import com.example.wr.story.data.local.dto.StoryDTO;
+import com.example.wr.story.data.local.mapper.StoryMapper;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -15,6 +17,10 @@ import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.subjects.BehaviorSubject;
+import io.realm.Realm;
+import io.realm.RealmList;
+import io.realm.RealmResults;
+import io.realm.Sort;
 
 /**
  * Created by WR.
@@ -22,46 +28,73 @@ import io.reactivex.subjects.BehaviorSubject;
 @Singleton
 public class LocalRepository {
 
-    @Inject
-    LocalRepository(){}
+    private BehaviorSubject<List<StoryDTO>> itemListBehaviorSubject;
+    private RealmResults<StoryDAO> results;
 
-    static ArrayList<StoryDTO> storyList = new ArrayList<>();
-    private BehaviorSubject<List<StoryDTO>> itemListBehaviorSubject = BehaviorSubject.createDefault(storyList);
+    @Inject
+    LocalRepository(){
+    }
 
     public Observable<List<StoryDTO>> getStoryDTOList() {
+        if (itemListBehaviorSubject == null)
+            itemListBehaviorSubject = BehaviorSubject.createDefault(getSortedStoryList());
         return itemListBehaviorSubject;
     }
 
     private List<StoryDTO> getSortedStoryList() {
-        Collections.sort(storyList, (o1, o2) -> o2.getDate().compareTo(o1.getDate()));
+        results = realm().where(StoryDAO.class).findAllSorted("date", Sort.DESCENDING);
+        results.addChangeListener((storyDAOS, changeSet) ->
+            itemListBehaviorSubject.onNext(StoryMapper.convertList(storyDAOS))
+        );
+        ArrayList<StoryDTO> storyList = new ArrayList<>();
+        storyList.addAll(StoryMapper.convertList(results));
         return storyList;
     }
 
-    public Observable<StoryDTO> getStoryDTOById(int id) {
-        Observable<StoryDTO> sampleStoryDTOListObservable = Observable.fromIterable(storyList)
-                .filter(item -> item.getId() == id);
+    public Single<StoryDTO> getStoryDTOById(long id) {
+        Single<StoryDTO> sampleStoryDTOListObservable = Single.create(emitter -> {
+            try {
+                StoryDAO results = realm()
+                        .where(StoryDAO.class)
+                        .equalTo("id", id)
+                        .findFirst();
+                emitter.onSuccess(StoryMapper.convertItem(results));
+            }catch (Exception e) {
+                emitter.onError(e);
+            }
+        });
         return sampleStoryDTOListObservable;
     }
 
     public Single<List<StoryDTO>> getStoryListByString(String string) {
-        Single<List<StoryDTO>> sampleStoryDTOListSingle = Observable.fromIterable(storyList)
-                .filter(item -> item.getTitle().contains(string) || item.getMemo().contains(string))
-                .toList();
+        Single<List<StoryDTO>> sampleStoryDTOListSingle = Single.create(emitter -> {
+            try {
+                RealmResults<StoryDAO> results = realm()
+                        .where(StoryDAO.class)
+                        .contains("title", string)
+                        .or()
+                        .contains("memo", string)
+                        .findAll();
+                emitter.onSuccess(StoryMapper.convertList(results));
+            }catch (Exception e) {
+                emitter.onError(e);
+            }
+        });
         return sampleStoryDTOListSingle;
     }
 
     public Completable updateStoryDTO(StoryDTO newItem) {
         Completable completable = Completable.create(emitter -> {
             try {
-                for (int i = 0 ; i < storyList.size() ; i++) {
-                    if (storyList.get(i).getId() == newItem.getId()) {
-                        storyList.set(i, newItem);
-                        itemListBehaviorSubject.onNext(getSortedStoryList());
-                        emitter.onComplete();
-                        return;
-                    }
-                }
-                emitter.onError(new RuntimeException("target item not exist."));
+                realm().executeTransaction(realm1 -> {
+                    StoryDAO item = realm1
+                            .where(StoryDAO.class)
+                            .equalTo("id", newItem.getId())
+                            .findFirst();
+                    StoryMapper.copyItem(newItem, item);
+                    realm1.insertOrUpdate(item);
+                    emitter.onComplete();
+                });
             }
             catch (Exception e) {
                 emitter.onError(e);
@@ -74,11 +107,14 @@ public class LocalRepository {
     public Completable addStoryDTO(StoryDTO newItem) {
         Completable completable = Completable.create(emitter -> {
             try {
-                storyList.add(newItem);
-                itemListBehaviorSubject.onNext(getSortedStoryList());
+                realm().beginTransaction();
+                StoryDAO dao = realm().createObject(StoryDAO.class, newItem.getId());
+                StoryMapper.copyItem(newItem, dao);
+                realm().commitTransaction();
                 emitter.onComplete();
             }
             catch (Exception e) {
+                realm().close();
                 emitter.onError(e);
             }
         });
@@ -89,8 +125,13 @@ public class LocalRepository {
     public Completable removeStoryDTO(StoryDTO targetItem) {
         Completable completable = Completable.create(emitter -> {
             try {
-                storyList.remove(targetItem);
-                itemListBehaviorSubject.onNext(getSortedStoryList());
+                realm().executeTransaction(realm1 -> {
+                    StoryDAO item = realm1
+                            .where(StoryDAO.class)
+                            .equalTo("id", targetItem.getId())
+                            .findFirst();
+                    item.deleteFromRealm();
+                });
                 emitter.onComplete();
             }
             catch (Exception e) {
@@ -99,21 +140,24 @@ public class LocalRepository {
         });
         return completable;
     }
+    
+    private Realm realm() {
+        return Realm.getDefaultInstance();
+    } 
 
 
     //////////////////////////////////////////////////////
     //    샘플 데이터 제작용 메소드
     //
     public Observable<List<StoryDTO>> getSampleStoryDTOList() {
-        storyList.addAll(makeSampleStoryDTOList());
+        makeSampleStoryDAOList();
         return getStoryDTOList();
     }
 
-    private List<StoryDTO> makeSampleStoryDTOList() {
-        ArrayList<StoryDTO> storyList = new ArrayList<>();
+    private void makeSampleStoryDAOList() {
 
         for (int i = 1; i < 30 ; i++) {
-            StoryDTO item = new StoryDTO();
+            StoryDAO item = new StoryDAO();
             item.setId(i);
 
             Calendar cal = Calendar.getInstance();
@@ -123,15 +167,17 @@ public class LocalRepository {
             item.setTitle("제목" + i);
             item.setMemo("메모입니다.\n메모는 멀티라인이 가능합니다.\n메모는 멀티라인이 가능합니다.\n메모는 멀티라인이 가능합니다.\n메모는 멀티라인이 가능합니다.\n메모는 멀티라인이 가능합니다.\n메모는 멀티라인이 가능합니다.\nMemo : " + i);
 
-            ArrayList<String> imagePathList = new ArrayList<>();
+            RealmList<RealmString> imagePathList = new RealmList<>();
             for (int j = 0 ; j < i % 4 + 1; j ++) {
-                imagePathList.add(0, "story_sample" + j);
+                imagePathList.add(0, new RealmString("story_sample" + j));
             }
             item.setImagePathList(imagePathList);
-            storyList.add(item);
+            realm().beginTransaction();
+            realm().copyToRealm(item);
+            realm().commitTransaction();
         }
 
-        return storyList;
+
     }
 
 }

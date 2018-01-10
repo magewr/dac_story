@@ -122,7 +122,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, App
     }
 
     @Override
-    public void showDetailActivityByStoryId(int storyId) {
+    public void showDetailActivityByStoryId(long storyId) {
         Navigator.toDetailActivity(this, storyId);
     }
 

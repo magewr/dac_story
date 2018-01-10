@@ -14,7 +14,7 @@ public interface MainContract{
     interface View extends BaseView {
         void onRecyclerViewAdapterUpdated();
         StorySectionAdapter getRecyclerViewAdapter();
-        void showDetailActivityByStoryId(int storyId);
+        void showDetailActivityByStoryId(long storyId);
     }
 
     interface Presenter {

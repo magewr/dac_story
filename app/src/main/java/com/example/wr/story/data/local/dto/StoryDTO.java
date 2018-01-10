@@ -16,19 +16,20 @@ import lombok.Setter;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class StoryDTO {
-    private int id;
+public class StoryDTO{
+    private long id;
     private Date date;
     private String title;
     private String memo;
     private ArrayList<String> imagePathList;
+
 
     public StoryDTO(StoryDTO copyStoryDto) {
         this.id = copyStoryDto.id;
         this.date = copyStoryDto.date;
         this.title = copyStoryDto.title;
         this.memo = copyStoryDto.memo;
-        this.imagePathList = new ArrayList<>(copyStoryDto.imagePathList);
-
+        this.imagePathList = copyStoryDto.getImagePathList();
     }
+
 }

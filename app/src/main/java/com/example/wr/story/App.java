@@ -8,6 +8,7 @@ import com.example.wr.story.di.component.DaggerApplicationComponent;
 import com.example.wr.story.di.module.ApiModule;
 import com.example.wr.story.di.module.ApplicationModule;
 
+import io.realm.Realm;
 import lombok.Getter;
 
 /**
@@ -27,6 +28,7 @@ public class App extends Application {
                 .applicationModule(new ApplicationModule(this))
                 .build();
         context = this;
+        Realm.init(this);
     }
 
     @Override

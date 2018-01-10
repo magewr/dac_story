@@ -47,7 +47,7 @@ public class MainPresenter extends Presenter<MainContract.View> implements MainC
 
     @Override
     public void onStoryItemSelected(int position) {
-        int id = getView().getRecyclerViewAdapter().getData().get(position).t.getId();
+        long id = getView().getRecyclerViewAdapter().getData().get(position).t.getId();
         getView().showDetailActivityByStoryId(id);
     }
 

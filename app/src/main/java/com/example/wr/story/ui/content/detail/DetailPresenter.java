@@ -10,6 +10,7 @@ import javax.inject.Inject;
 
 import io.reactivex.observers.DisposableCompletableObserver;
 import io.reactivex.observers.DisposableObserver;
+import io.reactivex.observers.DisposableSingleObserver;
 
 /**
  * Created by WR.
@@ -33,10 +34,10 @@ public class DetailPresenter extends Presenter<DetailContract.View> implements D
     }
 
     @Override
-    public void setStoryById(int storyId) {
-        getStoryById.execute(new DisposableObserver<StoryDTO>() {
+    public void setStoryById(long storyId) {
+        getStoryById.execute(new DisposableSingleObserver<StoryDTO>() {
             @Override
-            public void onNext(StoryDTO storyDTO) {
+            public void onSuccess(StoryDTO storyDTO) {
                 detailStoryItem = storyDTO;
                 getView().onGetStory();
             }
@@ -45,16 +46,15 @@ public class DetailPresenter extends Presenter<DetailContract.View> implements D
             public void onError(Throwable e) {
 
             }
-
-            @Override
-            public void onComplete() {
-
-            }
         }, storyId);
     }
 
     @Override
     public void onStoryItemModified(StoryDTO item, PresenterResultListener.OnSuccessListener onSuccessListener, PresenterResultListener.OnErrorListener onErrorListener) {
+        if (item.getImagePathList().size() == 0) {
+            onErrorListener.onError(new IllegalStateException("no pictures").getMessage());
+            return;
+        }
         updateStory.execute(new DisposableCompletableObserver() {
             @Override
             public void onComplete() {

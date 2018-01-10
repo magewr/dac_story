@@ -33,7 +33,7 @@ import static com.example.wr.story.ui.content.camera.CameraActivity.RESULT_IMAGE
 public class DetailActivity extends BaseActivity implements DetailContract.View {
 
     private static final String STORY_ID = "storyId";
-    public static Intent getCallingIntent(Context context, int storyId) {
+    public static Intent getCallingIntent(Context context, long storyId) {
         Intent intent = new Intent(context, DetailActivity.class);
         intent.putExtra(STORY_ID, storyId);
         return intent;
@@ -77,7 +77,7 @@ public class DetailActivity extends BaseActivity implements DetailContract.View 
     }
 
     protected void initOwnData() {
-        int storyId = getIntent().getIntExtra(STORY_ID, -1);
+        long storyId = getIntent().getLongExtra(STORY_ID, -1);
         presenter.setStoryById(storyId);
     }
 

@@ -37,7 +37,7 @@ public class DataRepository {
         return localRepository.getStoryDTOList();
     }
 
-    public Observable<StoryDTO> getStoryDtoById(int storyId) {
+    public Single<StoryDTO> getStoryDtoById(long storyId) {
         return localRepository.getStoryDTOById(storyId);
     }
 

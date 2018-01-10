@@ -25,7 +25,7 @@ public class Navigator {
         context.startActivity(MainActivity.getCallingIntent(context));
     }
 
-    public static void toDetailActivity(Context context, int storyId) {
+    public static void toDetailActivity(Context context, long storyId) {
         context.startActivity(DetailActivity.getCallingIntent(context, storyId));
     }
 

@@ -15,7 +15,7 @@ public interface DetailContract {
     }
 
     interface Presenter {
-        void setStoryById(int storyId);
+        void setStoryById(long storyId);
         void onStoryItemModified(StoryDTO item, PresenterResultListener.OnSuccessListener onSuccessListener, PresenterResultListener.OnErrorListener onErrorListener);
         StoryDTO copyDetailStoryItem();
     }

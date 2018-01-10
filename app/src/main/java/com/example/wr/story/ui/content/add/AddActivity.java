@@ -62,6 +62,7 @@ public class AddActivity extends DetailActivity {
     @Override
     protected void onEditFabClicked() {
         newItem.setDate(new Date());
+        newItem.setId(newItem.getDate().getTime());
         newItem.setTitle(titleEditText.getText().toString());
         newItem.setMemo(memoEditText.getText().toString());
         presenter.onStoryItemModified(newItem, () -> {
