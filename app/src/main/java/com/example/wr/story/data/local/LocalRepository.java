@@ -12,6 +12,7 @@ import javax.inject.Inject;
 
 import io.reactivex.Completable;
 import io.reactivex.Observable;
+import io.reactivex.Single;
 import io.reactivex.subjects.BehaviorSubject;
 
 /**
@@ -39,6 +40,13 @@ public class LocalRepository {
         Observable<StoryDTO> sampleStoryDTOListObservable = Observable.fromIterable(storyList)
                 .filter(item -> item.getId() == id);
         return sampleStoryDTOListObservable;
+    }
+
+    public Single<List<StoryDTO>> getStoryListByString(String string) {
+        Single<List<StoryDTO>> sampleStoryDTOListSingle = Observable.fromIterable(storyList)
+                .filter(item -> item.getTitle().contains(string) || item.getMemo().contains(string))
+                .toList();
+        return sampleStoryDTOListSingle;
     }
 
     public Completable updateStoryDTO(StoryDTO newItem) {

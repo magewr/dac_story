@@ -4,7 +4,6 @@ import com.example.wr.story.data.local.LocalRepository;
 import com.example.wr.story.data.remote.RemoteRepository;
 import com.example.wr.story.data.local.dto.StoryDTO;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -12,6 +11,7 @@ import javax.inject.Singleton;
 
 import io.reactivex.Completable;
 import io.reactivex.Observable;
+import io.reactivex.Single;
 
 /**
  * Created by WR.
@@ -37,6 +37,10 @@ public class DataRepository {
 
     public Observable<StoryDTO> getStoryDtoById(int storyId) {
         return localRepository.getStoryDTOById(storyId);
+    }
+
+    public Single<List<StoryDTO>> getStoryListByString(String string) {
+        return localRepository.getStoryListByString(string);
     }
 
     public Completable updateStoryDto(StoryDTO item) {

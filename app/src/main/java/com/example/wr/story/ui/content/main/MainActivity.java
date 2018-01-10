@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.arlib.floatingsearchview.FloatingSearchView;
+import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.wr.story.R;
 import com.example.wr.story.di.module.ActivityModule;
@@ -69,6 +70,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, App
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initRecyclerView();
+        initSearchView();
         fabMenu.setClosedOnTouchOutside(true);
         mAppBar.addOnOffsetChangedListener(this);
     }
@@ -116,6 +118,10 @@ public class MainActivity extends BaseActivity implements MainContract.View, App
         });
     }
 
+    private void initSearchView () {
+        mSearchView.setOnQueryChangeListener((oldQuery, newQuery) -> presenter.searchStory(newQuery));
+    }
+
     @Override
     public void showDetailActivityByStoryId(int storyId) {
         Navigator.toDetailActivity(this, storyId);
@@ -138,5 +144,13 @@ public class MainActivity extends BaseActivity implements MainContract.View, App
     @Override
     public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
         mSearchView.setTranslationY(verticalOffset);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (mSearchView.setSearchFocused(false) == true)
+            return;
+
+        super.onBackPressed();
     }
 }

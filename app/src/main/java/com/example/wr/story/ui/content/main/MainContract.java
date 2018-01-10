@@ -23,5 +23,6 @@ public interface MainContract{
         void dispose();
         void onStoryItemSelected(int position);
         void removeStoryItem(int position, OnSuccessListener success, OnErrorListener error);
+        void searchStory(String string);
     }
 }
