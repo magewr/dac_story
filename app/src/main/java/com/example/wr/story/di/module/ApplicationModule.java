@@ -3,6 +3,7 @@ package com.example.wr.story.di.module;
 import android.content.Context;
 
 import com.example.wr.story.App;
+import com.example.wr.story.data.local.FileManager;
 
 import javax.inject.Singleton;
 
@@ -26,5 +27,9 @@ public class ApplicationModule {
     Context provideApplicationContext() {
         return this.application;
     }
+
+    @Provides
+    @Singleton
+    FileManager provideFileManager() {return new FileManager();}
 
 }

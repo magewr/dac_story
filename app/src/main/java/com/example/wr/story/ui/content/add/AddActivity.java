@@ -4,13 +4,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.widget.Toast;
 
+import com.example.wr.story.R;
 import com.example.wr.story.data.local.dto.StoryDTO;
 import com.example.wr.story.di.module.ActivityModule;
 import com.example.wr.story.ui.content.detail.DetailActivity;
-import com.example.wr.story.ui.content.detail.adapter.ThumbnailViewPagerAdapter;
-import com.example.wr.story.ui.listener.OnItemClickListener;
 import com.example.wr.story.ui.listener.OnStoryDisplayModeChangedListener.DisplayMode;
-import com.example.wr.story.ui.util.Navigator;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -42,25 +40,13 @@ public class AddActivity extends DetailActivity {
 
     @Override
     protected void initViewPager() {
-        adapter = new ThumbnailViewPagerAdapter(getSupportFragmentManager(), DisplayMode.EditMode, new OnItemClickListener() {
-            @Override
-            public void onClick(int position) {
-                Navigator.toGalleryActivity(AddActivity.this, newItem.getImagePathList() , position);
-            }
-
-            @Override
-            public void onRemoveItemClick(int position) {
-                newItem.getImagePathList().remove(position);
-                adapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onAddItemClick() {
-                Toast.makeText(AddActivity.this, "addItemClicked", Toast.LENGTH_SHORT).show();
-            }
-        });
+        super.initViewPager();
         adapter.setImagePathList(newItem.getImagePathList());
-        viewPager.setAdapter(adapter);
+    }
+
+    @Override
+    protected StoryDTO getDetailedStoryItem() {
+        return newItem;
     }
 
     @Override
@@ -79,9 +65,10 @@ public class AddActivity extends DetailActivity {
         newItem.setTitle(titleEditText.getText().toString());
         newItem.setMemo(memoEditText.getText().toString());
         presenter.onStoryItemModified(newItem, () -> {
-
+            Toast.makeText(this, getString(R.string.detail_toast_add_success), Toast.LENGTH_SHORT).show();
+            finish();
         }, errorMessage -> {
-
+            Toast.makeText(this, getString(R.string.detail_toast_add_error) + errorMessage, Toast.LENGTH_SHORT).show();
         });
     }
 }

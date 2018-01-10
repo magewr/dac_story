@@ -20,12 +20,15 @@ import com.example.wr.story.ui.util.Navigator;
 import com.example.wr.story.ui.util.StoryItemUtil;
 import com.github.clans.fab.FloatingActionButton;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+
+import static com.example.wr.story.ui.content.camera.CameraActivity.RESULT_IMAGE_LIST_KEY;
 
 public class DetailActivity extends BaseActivity implements DetailContract.View {
 
@@ -79,21 +82,21 @@ public class DetailActivity extends BaseActivity implements DetailContract.View 
     }
 
     protected void initViewPager() {
-        adapter = new ThumbnailViewPagerAdapter(getSupportFragmentManager(), currentDisplayMode, new OnItemClickListener() {
+        adapter = new ThumbnailViewPagerAdapter(getSupportFragmentManager(), getInitDisplayMode(), new OnItemClickListener() {
             @Override
             public void onClick(int position) {
-                Navigator.toGalleryActivity(DetailActivity.this, tempStoryItem.getImagePathList(), position);
+                Navigator.toGalleryActivity(DetailActivity.this, getDetailedStoryItem().getImagePathList(), position);
             }
 
             @Override
             public void onRemoveItemClick(int position) {
-                tempStoryItem.getImagePathList().remove(position);
+                getDetailedStoryItem().getImagePathList().remove(position);
                 adapter.notifyDataSetChanged();
             }
 
             @Override
             public void onAddItemClick() {
-
+                Navigator.toCameraActivityForResult(DetailActivity.this);
             }
         });
         viewPager.setAdapter(adapter);
@@ -101,6 +104,10 @@ public class DetailActivity extends BaseActivity implements DetailContract.View 
 
     protected DisplayMode getInitDisplayMode() {
         return DisplayMode.ViewMode;
+    }
+
+    protected StoryDTO getDetailedStoryItem() {
+        return tempStoryItem;
     }
 
     protected boolean handleOnBackPressed() {
@@ -115,6 +122,18 @@ public class DetailActivity extends BaseActivity implements DetailContract.View 
         if (handleOnBackPressed() == true)
             return;
         super.onBackPressed();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            ArrayList<String> pathListFromCamera = data.getStringArrayListExtra(RESULT_IMAGE_LIST_KEY);
+            if (pathListFromCamera != null) {
+                adapter.addImagePathList(pathListFromCamera);
+                adapter.notifyDataSetChanged();
+            }
+        }
     }
 
     @Override

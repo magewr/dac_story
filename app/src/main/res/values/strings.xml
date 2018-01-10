@@ -17,4 +17,7 @@
     <string name="detail_toast_modify_error">수정 실패</string>
     <string name="detail_toast_add_success">생성되었습니다.</string>
     <string name="detail_toast_add_error">생성 실패</string>
+
+    <string name="camera_toast_request_permission">권한이 필요합니다. 권한 설정을 해주세요.</string>
+    <string name="camera_toast_save_error">저장 실패</string>
 </resources>

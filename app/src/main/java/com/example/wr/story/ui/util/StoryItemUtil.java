@@ -51,6 +51,11 @@ public class StoryItemUtil {
         return df.format(date);
     }
 
+    public static String getDateStringForFIle(Date date) {
+        SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");
+        return df.format(date);
+    }
+
     public static boolean setThumbnailImageByGlide(String imagePath, ImageView imageView) {
         try {
             if (imagePath.startsWith("story_sample") == true) {

@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import io.reactivex.Completable;
 import io.reactivex.Observable;
@@ -18,7 +19,7 @@ import io.reactivex.subjects.BehaviorSubject;
 /**
  * Created by WR.
  */
-
+@Singleton
 public class LocalRepository {
 
     @Inject

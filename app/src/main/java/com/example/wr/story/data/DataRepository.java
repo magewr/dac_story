@@ -1,5 +1,6 @@
 package com.example.wr.story.data;
 
+import com.example.wr.story.data.local.FileManager;
 import com.example.wr.story.data.local.LocalRepository;
 import com.example.wr.story.data.remote.RemoteRepository;
 import com.example.wr.story.data.local.dto.StoryDTO;
@@ -22,6 +23,7 @@ public class DataRepository {
 
     private LocalRepository localRepository;
     private RemoteRepository remoteRepository;
+    @Inject FileManager fileManager;
 
     @Inject
     DataRepository(LocalRepository localRepository, RemoteRepository remoteRepository) {
@@ -53,6 +55,10 @@ public class DataRepository {
 
     public Completable removeStoryDto(StoryDTO item) {
         return localRepository.removeStoryDTO(item);
+    }
+
+    public Single<String> savePictureData (String imagePath, final byte[] data) {
+        return fileManager.savePictureData(imagePath, data);
     }
 
 }

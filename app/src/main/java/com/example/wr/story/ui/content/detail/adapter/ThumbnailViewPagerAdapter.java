@@ -64,4 +64,8 @@ public class ThumbnailViewPagerAdapter extends FragmentStatePagerAdapter impleme
         this.displayMode = displayMode;
         notifyDataSetChanged();
     }
+
+    public void addImagePathList (List<String> addItemList) {
+        imagePathList.addAll(addItemList);
+    }
 }
