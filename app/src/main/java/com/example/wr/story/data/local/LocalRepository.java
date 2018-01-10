@@ -158,11 +158,11 @@ public class LocalRepository {
 
         for (int i = 1; i < 30 ; i++) {
             StoryDAO item = new StoryDAO();
-            item.setId(i);
 
             Calendar cal = Calendar.getInstance();
             cal.add(Calendar.DATE, -10 * i);
             item.setDate(new Date(cal.getTimeInMillis()));
+            item.setId(cal.getTimeInMillis());
 
             item.setTitle("제목" + i);
             item.setMemo("메모입니다.\n메모는 멀티라인이 가능합니다.\n메모는 멀티라인이 가능합니다.\n메모는 멀티라인이 가능합니다.\n메모는 멀티라인이 가능합니다.\n메모는 멀티라인이 가능합니다.\n메모는 멀티라인이 가능합니다.\nMemo : " + i);
