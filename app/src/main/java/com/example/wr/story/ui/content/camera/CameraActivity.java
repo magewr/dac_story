@@ -17,7 +17,6 @@ import com.example.wr.story.di.module.ActivityModule;
 import com.example.wr.story.ui.base.BaseActivity;
 import com.example.wr.story.ui.util.Navigator;
 import com.example.wr.story.ui.util.StoryItemUtil;
-import com.google.android.cameraview.AspectRatio;
 import com.google.android.cameraview.CameraView;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 

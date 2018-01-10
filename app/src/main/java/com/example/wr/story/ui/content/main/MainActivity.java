@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.arlib.floatingsearchview.FloatingSearchView;
-import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.wr.story.R;
 import com.example.wr.story.di.module.ActivityModule;

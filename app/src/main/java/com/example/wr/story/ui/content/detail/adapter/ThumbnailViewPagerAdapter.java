@@ -8,7 +8,6 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import com.example.wr.story.ui.listener.OnItemClickListener;
 import com.example.wr.story.ui.listener.OnStoryDisplayModeChangedListener;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import lombok.Setter;

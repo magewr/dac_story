@@ -2,10 +2,6 @@ package com.example.wr.story.interactor.base;
 
 import com.example.wr.story.data.DataRepository;
 
-import java.util.concurrent.TimeUnit;
-
-import javax.inject.Inject;
-
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;

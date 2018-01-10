@@ -2,16 +2,12 @@ package com.example.wr.story.ui.content.add;
 
 import com.example.wr.story.data.local.dto.StoryDTO;
 import com.example.wr.story.interactor.AddStory;
-import com.example.wr.story.interactor.GetStoryById;
-import com.example.wr.story.interactor.UpdateStory;
 import com.example.wr.story.ui.base.Presenter;
-import com.example.wr.story.ui.content.detail.DetailContract;
 import com.example.wr.story.ui.listener.PresenterResultListener;
 
 import javax.inject.Inject;
 
 import io.reactivex.observers.DisposableCompletableObserver;
-import io.reactivex.observers.DisposableObserver;
 
 /**
  * Created by WR.

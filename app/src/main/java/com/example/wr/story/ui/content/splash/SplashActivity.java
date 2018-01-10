@@ -2,7 +2,6 @@ package com.example.wr.story.ui.content.splash;
 
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Typeface;
 import android.os.Handler;
 
 import com.example.wr.story.R;

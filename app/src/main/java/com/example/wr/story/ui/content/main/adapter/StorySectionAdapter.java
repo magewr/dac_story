@@ -7,8 +7,6 @@ import com.example.wr.story.ui.util.StoryItemUtil;
 
 import java.util.List;
 
-import lombok.Setter;
-
 /**
  * Created by WR.
  */

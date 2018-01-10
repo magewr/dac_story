@@ -4,9 +4,6 @@ import android.content.Context;
 
 import com.example.wr.story.di.scope.PerActivity;
 import com.example.wr.story.ui.base.BaseActivity;
-import com.example.wr.story.ui.util.StoryItemUtil;
-
-import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;

@@ -1,22 +1,15 @@
 package com.example.wr.story.data.remote;
 
-import android.accounts.NetworkErrorException;
 import android.support.annotation.NonNull;
-
-import com.example.wr.story.data.local.dto.StoryDTO;
-import com.example.wr.story.data.remote.service.BaseUrl;
-import com.example.wr.story.data.remote.service.SampleApiService;
 
 import java.io.IOException;
 
 import javax.inject.Inject;
 
-import io.reactivex.Observable;
 import retrofit2.Call;
 
 import static com.example.wr.story.data.remote.ServiceError.ERROR_UNDEFINED;
 import static com.example.wr.story.data.remote.ServiceError.NETWORK_ERROR;
-import static com.example.wr.story.data.remote.ServiceError.SUCCESS_CODE;
 
 /**
  * Created by WR.
