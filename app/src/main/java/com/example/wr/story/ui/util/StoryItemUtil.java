@@ -1,7 +1,9 @@
 package com.example.wr.story.ui.util;
 
+import android.content.ContentResolver;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -108,5 +110,20 @@ public class StoryItemUtil {
             }
         });
         return observable;
+    }
+
+    public static Uri getUriFromImagePath(String imagePath) {
+        if (imagePath.startsWith("story_sample") == true) {
+            int index = Integer.parseInt(imagePath.replace("story_sample", ""));
+            int[] sampleDrawable = {R.drawable.sample1, R.drawable.sample2, R.drawable.sample3, R.drawable.sample4};
+            Uri imageUri = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE +
+                    "://" + App.getContext().getResources().getResourcePackageName(sampleDrawable[index])
+                    + '/' + App.getContext().getResources().getResourceTypeName(sampleDrawable[index])
+                    + '/' + App.getContext().getResources().getResourceEntryName(sampleDrawable[index]) );
+            return imageUri;
+        }
+        else {
+            return Uri.fromFile(new File(imagePath));
+        }
     }
 }

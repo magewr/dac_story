@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.example.wr.story.R;
 import com.example.wr.story.di.module.ActivityModule;
 import com.example.wr.story.ui.base.BaseActivity;
+import com.example.wr.story.ui.util.AndroidUtil;
 import com.example.wr.story.ui.util.Navigator;
 import com.example.wr.story.ui.util.StoryItemUtil;
 import com.google.android.cameraview.CameraView;
@@ -66,7 +67,7 @@ public class CameraActivity extends BaseActivity implements CameraContract.View{
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        AndroidUtil.setNoStatusBarActivity(this);
         super.onCreate(savedInstanceState);
         requestPermission();
     }

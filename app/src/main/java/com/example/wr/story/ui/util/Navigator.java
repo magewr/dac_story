@@ -10,6 +10,7 @@ import com.example.wr.story.ui.content.add.AddActivity;
 import com.example.wr.story.ui.content.camera.CameraActivity;
 import com.example.wr.story.ui.content.detail.DetailActivity;
 import com.example.wr.story.ui.content.gallery.GalleryActivity;
+import com.example.wr.story.ui.content.gallery.manyimage.ManyImageGalleryActivity;
 import com.example.wr.story.ui.content.main.MainActivity;
 
 import java.util.ArrayList;
@@ -30,7 +31,10 @@ public class Navigator {
     }
 
     public static void toGalleryActivity(Context context, ArrayList<String> imagePathList, int imageIndex) {
-        context.startActivity(GalleryActivity.getCallingIntent(context, imagePathList, imageIndex));
+        if (imagePathList.size() > 3)
+            context.startActivity(ManyImageGalleryActivity.getCallingIntent(context, imagePathList, imageIndex));
+        else
+            context.startActivity(GalleryActivity.getCallingIntent(context, imagePathList, imageIndex));
     }
 
     public static void toAddActivity(Context context) {
