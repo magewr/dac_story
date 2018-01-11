@@ -47,6 +47,6 @@ public class ViewPagerManyImageFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        bigImageView.showImage(Uri.fromFile(new File(imagePath)));
+        bigImageView.showImage(StoryItemUtil.getUriFromImagePath(imagePath));
     }
 }
