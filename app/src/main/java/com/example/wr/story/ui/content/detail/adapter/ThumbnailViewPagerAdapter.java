@@ -18,11 +18,9 @@ import lombok.Setter;
 
 public class ThumbnailViewPagerAdapter extends FragmentStatePagerAdapter implements OnStoryDisplayModeChangedListener {
 
-    @Setter
-    List<String> imagePathList;
-
+    @Setter private OnImageListChangedListener imageListChangedListener;
+    @Setter private List<String> imagePathList;
     private DisplayMode displayMode;
-
     private OnItemClickListener onItemClickListener;
 
     public ThumbnailViewPagerAdapter(FragmentManager fm, DisplayMode displayMode, OnItemClickListener onItemClickListener) {
@@ -59,6 +57,13 @@ public class ThumbnailViewPagerAdapter extends FragmentStatePagerAdapter impleme
     }
 
     @Override
+    public void notifyDataSetChanged() {
+        super.notifyDataSetChanged();
+        if (imageListChangedListener != null)
+            imageListChangedListener.onImageListChanged(imagePathList);
+    }
+
+    @Override
     public void onDisplayModeChanged(DisplayMode displayMode) {
         this.displayMode = displayMode;
         notifyDataSetChanged();
@@ -66,5 +71,15 @@ public class ThumbnailViewPagerAdapter extends FragmentStatePagerAdapter impleme
 
     public void addImagePathList (List<String> addItemList) {
         imagePathList.addAll(addItemList);
+    }
+
+    public int getImageCount() {
+        if (imagePathList == null)
+            return 0;
+        return imagePathList.size();
+    }
+
+    public interface OnImageListChangedListener {
+        void onImageListChanged(List<String> list);
     }
 }

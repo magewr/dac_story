@@ -22,6 +22,7 @@ import com.github.clans.fab.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 
 import javax.inject.Inject;
 
@@ -63,6 +64,7 @@ public class DetailActivity extends BaseActivity implements DetailContract.View 
     @BindView(R.id.edit_memo)       protected EditText memoEditText;
     @BindView(R.id.detail_edit_fab) protected FloatingActionButton editFab;
     @BindView(R.id.image_viewpager) protected ViewPager viewPager;
+    @BindView(R.id.text_indicator)  protected TextView indicatorTextView;
 
     @Inject       DetailPresenter presenter;
     protected     ThumbnailViewPagerAdapter adapter;    // 썸네일 뷰페이저 어댑터
@@ -160,7 +162,14 @@ public class DetailActivity extends BaseActivity implements DetailContract.View 
                 Navigator.toCameraActivityForResult(DetailActivity.this);
             }
         });
+        adapter.setImageListChangedListener(list -> updateIndicatorText(viewPager.getCurrentItem()));
         viewPager.setAdapter(adapter);
+        viewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+            @Override
+            public void onPageSelected(int position) {
+                updateIndicatorText(position);
+            }
+        });
     }
 
     /**
@@ -290,6 +299,15 @@ public class DetailActivity extends BaseActivity implements DetailContract.View 
         }
         // ViewPager는 보기모드에따라 삭제 아이콘과 이미지 추가 페이지가 결정되므로 Notify 해 줌.
         adapter.onDisplayModeChanged(displayMode);
+    }
+
+    /**
+     *
+     * @param currentPosition
+     */
+    private void updateIndicatorText (int currentPosition) {
+        int imagePosition = ++currentPosition > adapter.getImageCount() ? --currentPosition : currentPosition;
+        indicatorTextView.setText(String.format(Locale.getDefault(),"%d / %d", imagePosition, adapter.getImageCount()));
     }
 
 }

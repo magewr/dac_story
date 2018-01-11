@@ -44,6 +44,7 @@ public class DetailPresenter extends Presenter<DetailContract.View> implements D
         getStoryById.execute(new DisposableSingleObserver<StoryDTO>() {
             @Override
             public void onSuccess(StoryDTO storyDTO) {
+                //Story를 못찾을 경우 에러처리
                 if (storyDTO == null) {
                     listener.onResult(false, new StoryNotFoundException().getMessage());
                     return;
@@ -62,6 +63,7 @@ public class DetailPresenter extends Presenter<DetailContract.View> implements D
 
     @Override
     public void updateStory(StoryDTO item, PresenterResultListener listener) {
+        // 사진이 하나도 없을경우 저장불가 - 에러처리
         if (item.getImagePathList().size() == 0) {
             listener.onResult(false, new NoPictureException().getMessage());
             return;
