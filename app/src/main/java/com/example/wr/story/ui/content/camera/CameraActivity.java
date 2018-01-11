@@ -20,6 +20,7 @@ import com.example.wr.story.ui.util.StoryItemUtil;
 import com.google.android.cameraview.CameraView;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -107,12 +108,12 @@ public class CameraActivity extends BaseActivity implements CameraContract.View{
     private CameraView.Callback callBack = new CameraView.Callback() {
         @Override
         public void onPictureTaken(CameraView cameraView, byte[] data) {
-            final String fileName = getPictureDirectory() + StoryItemUtil.getDateStringForFIle(new Date());
+            final String fileName = getPictureFilePath(StoryItemUtil.getDateStringForFIle(new Date()));
             presenter.savePicture(fileName, data, (isSuccess, msg) -> {
                 if (isSuccess)
                     ;
                 else
-                    Toast.makeText(CameraActivity.this, getString(R.string.camera_toast_save_error), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CameraActivity.this, getString(R.string.camera_toast_save_error) + msg, Toast.LENGTH_SHORT).show();
             });
         }
     };
@@ -128,8 +129,16 @@ public class CameraActivity extends BaseActivity implements CameraContract.View{
         imagePathList.add(imagePath);
     }
 
-    private String getPictureDirectory() {
-        return getExternalFilesDir(Environment.DIRECTORY_DCIM).getAbsolutePath();
+    private String getPictureFilePath(String fileName) {
+        File storage = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+        if (storage != null && storage.exists()) {
+            String folderPath = storage.getPath() + "/Story/";
+            File folder = new File(folderPath);
+            if (folder.exists() == false)
+                folder.mkdir();
+            return folderPath + fileName + ".jpg";
+        }
+        return String.format("%s/%s.jpg",getExternalFilesDir(Environment.DIRECTORY_DCIM).getPath(), fileName);
     }
 
     private void makeResultIntent() {
