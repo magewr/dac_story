@@ -4,6 +4,9 @@ import android.content.Context;
 
 import com.example.wr.story.App;
 import com.example.wr.story.data.local.FileManager;
+import com.example.wr.story.data.local.LocalRepository;
+import com.example.wr.story.data.local.impl.FileManagerImpl;
+import com.example.wr.story.data.local.impl.RealmLocalRepository;
 
 import javax.inject.Singleton;
 
@@ -30,6 +33,10 @@ public class ApplicationModule {
 
     @Provides
     @Singleton
-    FileManager provideFileManager() {return new FileManager();}
+    FileManager provideFileManager() {return new FileManagerImpl();}
+
+    @Provides
+    @Singleton
+    LocalRepository provideLocalRepository() {return new RealmLocalRepository();}
 
 }
