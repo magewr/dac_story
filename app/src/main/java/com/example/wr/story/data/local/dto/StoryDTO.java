@@ -29,7 +29,8 @@ public class StoryDTO{
         this.date = copyStoryDto.date;
         this.title = copyStoryDto.title;
         this.memo = copyStoryDto.memo;
-        this.imagePathList = copyStoryDto.getImagePathList();
+        this.imagePathList = new ArrayList<>();
+        this.imagePathList.addAll(copyStoryDto.getImagePathList());
     }
 
 }
