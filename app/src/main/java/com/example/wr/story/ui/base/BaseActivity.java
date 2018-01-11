@@ -73,6 +73,13 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseView
             presenter.onStopPresenter();
     }
 
+    @Override
+    protected void onDestroy() {
+//        if (presenter != null)
+//            presenter.onDestroyPresenter();
+        super.onDestroy();
+    }
+
     protected ApplicationComponent getApplicationComponent() {
         return App.get(this).getApplicationComponent();
     }

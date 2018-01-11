@@ -19,7 +19,6 @@ public interface MainContract{
     interface Presenter {
         void getStoryList();
         void getSampleStoryList();
-        void dispose();
         void onStoryItemSelected(int position);
         void removeStoryItem(int position, PresenterResultListener listener);
         void searchStory(String string);

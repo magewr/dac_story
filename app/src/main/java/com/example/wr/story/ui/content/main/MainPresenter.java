@@ -40,10 +40,12 @@ public class MainPresenter extends Presenter<MainContract.View> implements MainC
     }
 
     @Override
-    public void dispose() {
+    public void onDestroyPresenter() {
+        super.onDestroyPresenter();
         getStoryList.dispose();
+        removeStory.dispose();
+        getStoryListByString.dispose();
     }
-
 
     @Override
     public void onStoryItemSelected(int position) {

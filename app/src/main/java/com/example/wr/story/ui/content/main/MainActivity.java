@@ -83,12 +83,6 @@ public class MainActivity extends BaseActivity implements MainContract.View, App
     public void onRecyclerViewAdapterUpdated() {
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        presenter.dispose();
-    }
-
     private void initRecyclerView() {
         storyRecyclerView.setLayoutManager(new GridLayoutManager(this,2));
         adapter = new StorySectionAdapter(R.layout.recyclerview_story_item_content, R.layout.recyclerview_story_section_header, null);

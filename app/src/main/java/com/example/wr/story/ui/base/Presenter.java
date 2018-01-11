@@ -27,4 +27,6 @@ public abstract class Presenter<T extends BaseView> {
         isViewAlive.set(false);
     }
 
+    public void onDestroyPresenter() {}
+
 }

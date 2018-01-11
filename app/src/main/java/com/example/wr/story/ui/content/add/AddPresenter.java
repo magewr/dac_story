@@ -28,6 +28,11 @@ public class AddPresenter extends Presenter<AddContract.View> implements AddCont
         super.onCreatePresenter();
     }
 
+    @Override
+    public void onDestroyPresenter() {
+        super.onDestroyPresenter();
+        addStory.dispose();
+    }
 
     @Override
     public void onStoryItemModified(StoryDTO item, PresenterResultListener listener) {

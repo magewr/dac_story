@@ -40,6 +40,13 @@ public class DetailPresenter extends Presenter<DetailContract.View> implements D
     }
 
     @Override
+    public void onDestroyPresenter() {
+        super.onDestroyPresenter();
+        getStoryById.dispose();
+        updateStory.dispose();
+    }
+
+    @Override
     public void setStoryById(long storyId, PresenterResultListener listener) {
         getStoryById.execute(new DisposableSingleObserver<StoryDTO>() {
             @Override

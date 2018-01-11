@@ -36,4 +36,10 @@ public class CameraPresenter extends Presenter<CameraContract.View> implements C
             }
         }, SavePicture.Params.makeParams(imagePath, data));
     }
+
+    @Override
+    public void onDestroyPresenter() {
+        super.onDestroyPresenter();
+        savePicture.dispose();
+    }
 }
