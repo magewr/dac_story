@@ -16,8 +16,20 @@ import butterknife.ButterKnife;
 
 public abstract class BaseActivity extends AppCompatActivity implements BaseView{
 
+    /**
+     * Activity에서 사용할 Layout Resource를 리턴하는 메소드
+     * @return R.layout.id
+     */
     protected abstract int getLayoutId();
+
+    /**
+     * DI를 초기화하는 메소드. 일반적으로 여기서 component에 inject 함
+     */
     protected abstract void initDagger();
+
+    /**
+     * Presenter를 초기화하는 메소드
+     */
     protected abstract void initPresenter();
 
     protected Presenter presenter;

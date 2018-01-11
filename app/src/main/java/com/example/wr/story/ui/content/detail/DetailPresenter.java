@@ -5,6 +5,7 @@ import com.example.wr.story.interactor.GetStoryById;
 import com.example.wr.story.interactor.UpdateStory;
 import com.example.wr.story.ui.base.Presenter;
 import com.example.wr.story.ui.exception.NoPictureException;
+import com.example.wr.story.ui.exception.StoryNotFoundException;
 import com.example.wr.story.ui.listener.PresenterResultListener;
 
 import java.util.List;
@@ -21,8 +22,10 @@ import io.reactivex.observers.DisposableSingleObserver;
 
 public class DetailPresenter extends Presenter<DetailContract.View> implements DetailContract.Presenter  {
 
+    //UseCase
     private GetStoryById getStoryById;
     private UpdateStory updateStory;
+    //Repository에서 받은 원본 Story Item
     private StoryDTO detailStoryItem;
 
     @Inject
@@ -37,17 +40,22 @@ public class DetailPresenter extends Presenter<DetailContract.View> implements D
     }
 
     @Override
-    public void setStoryById(long storyId) {
+    public void setStoryById(long storyId, PresenterResultListener listener) {
         getStoryById.execute(new DisposableSingleObserver<StoryDTO>() {
             @Override
             public void onSuccess(StoryDTO storyDTO) {
+                if (storyDTO == null) {
+                    listener.onResult(false, new StoryNotFoundException().getMessage());
+                    return;
+                }
                 detailStoryItem = storyDTO;
                 getView().onGetStory();
+                listener.onResult(true, null);
             }
 
             @Override
             public void onError(Throwable e) {
-
+                listener.onResult(false, e.getMessage());
             }
         }, storyId);
     }
