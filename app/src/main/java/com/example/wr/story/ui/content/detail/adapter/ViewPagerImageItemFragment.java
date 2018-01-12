@@ -10,8 +10,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.example.wr.story.R;
+import com.example.wr.story.ui.content.detail.DisplayMode;
 import com.example.wr.story.ui.listener.OnItemClickListener;
-import com.example.wr.story.ui.listener.OnStoryDisplayModeChangedListener.DisplayMode;
 import com.example.wr.story.ui.util.StoryItemUtil;
 
 import butterknife.BindView;

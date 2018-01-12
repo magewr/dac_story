@@ -15,7 +15,6 @@ import com.example.wr.story.di.module.ActivityModule;
 import com.example.wr.story.ui.base.BaseActivity;
 import com.example.wr.story.ui.content.detail.adapter.ThumbnailViewPagerAdapter;
 import com.example.wr.story.ui.listener.OnItemClickListener;
-import com.example.wr.story.ui.listener.OnStoryDisplayModeChangedListener.DisplayMode;
 import com.example.wr.story.ui.util.AndroidUtil;
 import com.example.wr.story.ui.util.Navigator;
 import com.example.wr.story.ui.util.StoryItemUtil;
@@ -69,7 +68,6 @@ public class DetailActivity extends BaseActivity implements DetailContract.View 
 
     @Inject       DetailPresenter presenter;
     protected     ThumbnailViewPagerAdapter adapter;    // 썸네일 뷰페이저 어댑터
-    private       DisplayMode currentDisplayMode;       // 편짐 / 보기모드 enum
     private       StoryDTO tempStoryItem;               // 현재 보여지는 item의 복사본, 원본은 presenter만 소유
 
 
@@ -102,13 +100,13 @@ public class DetailActivity extends BaseActivity implements DetailContract.View 
         super.onCreate(savedInstanceState);
         initOwnData();
         initViewPager();
-        changeModeTo(getInitDisplayMode());
+        presenter.changeDisplayModeTo(getInitDisplayMode());
     }
 
     @Override
     public void onBackPressed() {
-        // 자식들에게 BackPressed를 noti한 뒤 consume 유무를 받아서 처리
-        if (handleOnBackPressed() == true)
+        //Presenter에서 판단 후 consume일 경우엔 무시
+        if (presenter.handleOnBackPressed() == true)
             return;
         super.onBackPressed();
     }
@@ -170,7 +168,7 @@ public class DetailActivity extends BaseActivity implements DetailContract.View 
         viewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
-                updateIndicatorText(position);
+                presenter.calculatePageIndicatorIndex(position);
             }
         });
     }
@@ -192,30 +190,14 @@ public class DetailActivity extends BaseActivity implements DetailContract.View 
         return tempStoryItem;
     }
 
-
-    /**
-     * BackPressed 발생 시 처리용 메소드
-     * return true시 이벤트는 consume되어 더이상 전달되지 않는다.
-     * @return need consume event
-     */
-    protected boolean handleOnBackPressed() {
-        if (currentDisplayMode == DisplayMode.EditMode) {
-            AndroidUtil.showAlertDialog(this, R.string.detail_dialog_cancel_modify_message, (dialogInterface, i) -> {
-                rollbackModifiedStory();
-            });
-            return true;
-        }
-        return false;
-    }
-
     @OnClick(R.id.detail_edit_fab)
     protected void onEditFabClicked() {
-        switch (currentDisplayMode) {
+        switch (presenter.getCurrentDisplayMode()) {
             case EditMode:
                 saveModifiedStory();
                 break;
             case ViewMode:
-                changeModeTo(DisplayMode.EditMode);
+                presenter.changeDisplayModeTo(DisplayMode.EditMode);
                 break;
         }
     }
@@ -234,13 +216,13 @@ public class DetailActivity extends BaseActivity implements DetailContract.View 
         adapter.notifyDataSetChanged();
     }
 
+    @Override
+    public void showCancelEditingAlertDialog() {
+        AndroidUtil.showAlertDialog(this, R.string.detail_dialog_cancel_modify_message, (dialogInterface, i) -> {
+            rollbackModifiedStory();
+        });
+    }
 
-    ///////////////////////////////////////////////
-    // 기타 메소드
-
-    /**
-     * 수정 Confirm시 Call되는 메소드
-     */
     private void saveModifiedStory () {
         tempStoryItem.setDate(new Date());
         tempStoryItem.setTitle(titleEditText.getText().toString());
@@ -251,35 +233,23 @@ public class DetailActivity extends BaseActivity implements DetailContract.View 
                 Toast.makeText(DetailActivity.this, getString(R.string.detail_toast_modify_success), Toast.LENGTH_SHORT).show();
                 // 성공 시에 presenter로부터 새롭게 아이템을 복사받아서 현재 story로 설정
                 tempStoryItem = presenter.copyDetailStoryItem();
-                adapter.setImagePathList(tempStoryItem.getImagePathList());
-                // EditMode 종료 후 ViewMode로 변경
-                changeModeTo(DisplayMode.ViewMode);
             }
             else
                 Toast.makeText(DetailActivity.this, getString(R.string.detail_toast_modify_error) + msg, Toast.LENGTH_SHORT).show();
         });
     }
 
-    /**
-     * 수정 취소 시 원래 Story의 데이터로 View 세팅하는 메소드
-     */
-    private void rollbackModifiedStory() {
+     @Override
+     public void rollbackModifiedStory() {
         tempStoryItem = presenter.copyDetailStoryItem();
         adapter.setImagePathList(tempStoryItem.getImagePathList());
         titleEditText.setText(tempStoryItem.getTitle());
         memoEditText.setText(tempStoryItem.getMemo());
-        changeModeTo(DisplayMode.ViewMode);
+        presenter.changeDisplayModeTo(DisplayMode.ViewMode);
     }
 
-    /**
-     * 보기모드 변경을 위한 메소드
-     * @param displayMode 변경 될 DisplayMode
-     */
-    private void changeModeTo (DisplayMode displayMode) {
-        if (displayMode == currentDisplayMode)
-            return;
-
-        currentDisplayMode = displayMode;
+    @Override
+    public void initViewByDisplayMode(DisplayMode displayMode) {
         switch (displayMode) {
             case EditMode:
                 titleEditText.setEnabled(true);
@@ -297,14 +267,13 @@ public class DetailActivity extends BaseActivity implements DetailContract.View 
                 dateTextView.setVisibility(View.VISIBLE);
                 break;
         }
-        // ViewPager는 보기모드에따라 삭제 아이콘과 이미지 추가 페이지가 결정되므로 Notify 해 줌.
-        adapter.onDisplayModeChanged(displayMode);
     }
 
-    /**
-     *
-     * @param currentPosition
-     */
+    @Override
+    public void setViewPagerIndicatorText(int current, int max) {
+        indicatorTextView.setText(String.format(Locale.getDefault(),"%d / %d", current, max));
+    }
+
     private void updateIndicatorText (int currentPosition) {
         int imagePosition = ++currentPosition > adapter.getImageCount() ? --currentPosition : currentPosition;
         indicatorTextView.setText(String.format(Locale.getDefault(),"%d / %d", imagePosition, adapter.getImageCount()));

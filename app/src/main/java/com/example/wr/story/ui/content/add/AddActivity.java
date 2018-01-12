@@ -8,7 +8,7 @@ import com.example.wr.story.R;
 import com.example.wr.story.data.local.dto.StoryDTO;
 import com.example.wr.story.di.module.ActivityModule;
 import com.example.wr.story.ui.content.detail.DetailActivity;
-import com.example.wr.story.ui.listener.OnStoryDisplayModeChangedListener.DisplayMode;
+import com.example.wr.story.ui.content.detail.DisplayMode;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -47,11 +47,6 @@ public class AddActivity extends DetailActivity {
     @Override
     protected StoryDTO getDetailedStoryItem() {
         return newItem;
-    }
-
-    @Override
-    protected boolean handleOnBackPressed() {
-        return false;
     }
 
     @Override

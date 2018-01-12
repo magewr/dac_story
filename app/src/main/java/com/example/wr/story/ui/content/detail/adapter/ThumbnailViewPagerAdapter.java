@@ -5,8 +5,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
+import com.example.wr.story.ui.content.detail.DisplayMode;
 import com.example.wr.story.ui.listener.OnItemClickListener;
-import com.example.wr.story.ui.listener.OnStoryDisplayModeChangedListener;
 
 import java.util.List;
 
@@ -16,7 +16,7 @@ import lombok.Setter;
  * Created by WR on 2018-01-08.
  */
 
-public class ThumbnailViewPagerAdapter extends FragmentStatePagerAdapter implements ThumbnailViewPagerAdapterModel, OnStoryDisplayModeChangedListener {
+public class ThumbnailViewPagerAdapter extends FragmentStatePagerAdapter implements ThumbnailViewPagerAdapterModel{
 
     @Setter private OnImageListChangedListener imageListChangedListener;
     @Setter private List<String> imagePathList;
@@ -74,6 +74,7 @@ public class ThumbnailViewPagerAdapter extends FragmentStatePagerAdapter impleme
         notifyDataSetChanged();
     }
 
+    @Override
     public int getImageCount() {
         if (imagePathList == null)
             return 0;

@@ -1,5 +1,7 @@
 package com.example.wr.story.ui.content.detail.adapter;
 
+import com.example.wr.story.ui.content.detail.DisplayMode;
+
 import java.util.List;
 
 /**
@@ -8,4 +10,7 @@ import java.util.List;
 
 public interface ThumbnailViewPagerAdapterModel {
     void addImagePathList (List<String> addItemList);
+    void setImagePathList (List<String> itemList);
+    void onDisplayModeChanged (DisplayMode displayMode);
+    int getImageCount();
 }
