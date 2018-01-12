@@ -75,11 +75,6 @@ public class MainActivity extends BaseActivity implements MainContract.View, App
     }
 
     @Override
-    public StorySectionAdapter getRecyclerViewAdapter() {
-        return adapter;
-    }
-
-    @Override
     public void onRecyclerViewAdapterUpdated() {
     }
 
@@ -111,6 +106,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, App
                 fabMenu.showMenu(true);
             }
         });
+        presenter.setAdapterModel(adapter);
     }
 
     private void initSearchView () {

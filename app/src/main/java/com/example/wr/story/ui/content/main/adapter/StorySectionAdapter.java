@@ -3,6 +3,7 @@ package com.example.wr.story.ui.content.main.adapter;
 import com.chad.library.adapter.base.BaseSectionQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.example.wr.story.R;
+import com.example.wr.story.data.local.dto.StoryDTO;
 import com.example.wr.story.ui.util.StoryItemUtil;
 
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.List;
  * Created by WR.
  */
 
-public class StorySectionAdapter extends BaseSectionQuickAdapter<StorySection, BaseViewHolder> {
+public class StorySectionAdapter extends BaseSectionQuickAdapter<StorySection, BaseViewHolder> implements StorySectionAdapterModel<StorySection> {
 
     public StorySectionAdapter(int layoutResId, int sectionHeadResId, List<StorySection> data) {
         super(layoutResId, sectionHeadResId, data);
@@ -29,5 +30,22 @@ public class StorySectionAdapter extends BaseSectionQuickAdapter<StorySection, B
         String imagePath = item.t.getImagePathList().get(0);
         StoryItemUtil.setThumbnailImageByGlide(imagePath, helper.getView(R.id.story_content_image));
         helper.addOnClickListener(R.id.story_content_remove_image);
+    }
+
+
+    @Override
+    public StoryDTO getStoryItem(int position) {
+        return getData().get(position).t;
+    }
+
+    @Override
+    public void setNewData(List<StorySection> data, boolean animation) {
+        if (animation)
+            setNewData(data);
+        else {
+            getData().clear();
+            addData(data);
+        }
+
     }
 }

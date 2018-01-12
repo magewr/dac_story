@@ -5,6 +5,8 @@ import com.example.wr.story.interactor.GetStoryListByString;
 import com.example.wr.story.interactor.GetStoryList;
 import com.example.wr.story.interactor.RemoveStory;
 import com.example.wr.story.ui.base.Presenter;
+import com.example.wr.story.ui.content.main.adapter.StorySectionAdapter;
+import com.example.wr.story.ui.content.main.adapter.StorySectionAdapterModel;
 import com.example.wr.story.ui.listener.PresenterResultListener;
 import com.example.wr.story.ui.util.StoryItemUtil;
 
@@ -22,9 +24,10 @@ import io.reactivex.observers.DisposableSingleObserver;
 
 public class MainPresenter extends Presenter<MainContract.View> implements MainContract.Presenter {
 
-    GetStoryList getStoryList;
-    RemoveStory removeStory;
-    GetStoryListByString getStoryListByString;
+    private GetStoryList getStoryList;
+    private RemoveStory removeStory;
+    private GetStoryListByString getStoryListByString;
+    private StorySectionAdapterModel adapterModel;
 
     @Inject
     public MainPresenter(GetStoryList getStoryListUseCase, RemoveStory removeStory, GetStoryListByString getStoryListByString){
@@ -48,8 +51,13 @@ public class MainPresenter extends Presenter<MainContract.View> implements MainC
     }
 
     @Override
+    public void setAdapterModel(StorySectionAdapterModel adapterModel) {
+        this.adapterModel = adapterModel;
+    }
+
+    @Override
     public void onStoryItemSelected(int position) {
-        long id = getView().getRecyclerViewAdapter().getData().get(position).t.getId();
+        long id = adapterModel.getStoryItem(position).getId();
         getView().showDetailActivityByStoryId(id);
     }
 
@@ -65,7 +73,7 @@ public class MainPresenter extends Presenter<MainContract.View> implements MainC
 
     @Override
     public void removeStoryItem(int position, PresenterResultListener listener) {
-        StoryDTO targetItem = getView().getRecyclerViewAdapter().getData().get(position).t;
+        StoryDTO targetItem = adapterModel.getStoryItem(position);
         removeStory.execute(new DisposableCompletableObserver() {
             @Override
             public void onComplete() {
@@ -84,7 +92,7 @@ public class MainPresenter extends Presenter<MainContract.View> implements MainC
         getStoryListByString.execute(new DisposableSingleObserver<List<StoryDTO>>() {
             @Override
             public void onSuccess(List<StoryDTO> dtoList) {
-                getView().getRecyclerViewAdapter().setNewData(StoryItemUtil.createSectionFromStory(dtoList));
+                adapterModel.setNewData(StoryItemUtil.createSectionFromStory(dtoList), true);
             }
 
             @Override
@@ -98,8 +106,7 @@ public class MainPresenter extends Presenter<MainContract.View> implements MainC
 
         @Override
         public void onNext(List<StoryDTO> storyDTOS) {
-            getView().getRecyclerViewAdapter().getData().clear();
-            getView().getRecyclerViewAdapter().addData(StoryItemUtil.createSectionFromStory(storyDTOS));
+            adapterModel.setNewData(StoryItemUtil.createSectionFromStory(storyDTOS), false);
             getView().onRecyclerViewAdapterUpdated();
         }
 
