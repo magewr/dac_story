@@ -74,7 +74,7 @@ public class RealmLocalRepository implements LocalRepository {
                         .contains("title", string)
                         .or()
                         .contains("memo", string)
-                        .findAll();
+                        .findAllSorted("date", Sort.DESCENDING);
                 emitter.onSuccess(StoryMapper.convertList(results));
             }catch (Exception e) {
                 emitter.onError(e);
