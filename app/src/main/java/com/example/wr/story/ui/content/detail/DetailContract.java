@@ -3,6 +3,7 @@ package com.example.wr.story.ui.content.detail;
 import com.example.wr.story.data.local.dto.StoryDTO;
 import com.example.wr.story.ui.base.BaseView;
 import com.example.wr.story.ui.content.detail.adapter.ThumbnailViewPagerAdapter;
+import com.example.wr.story.ui.content.detail.adapter.ThumbnailViewPagerAdapterModel;
 import com.example.wr.story.ui.listener.PresenterResultListener;
 
 import java.util.List;
@@ -18,12 +19,6 @@ public interface DetailContract {
          * Presenter가 Repository로부터 StoryItem을 가져왔을 때 불려지는 CallBack
          */
         void onGetStory();
-
-        /**
-         * View의 Thumbnail ViewPagerAdapter를 제공받는 메소드
-         * @return ThumbnailViewPagerAdapter
-         */
-        ThumbnailViewPagerAdapter getThumbnailAdapter();
     }
 
     interface Presenter {
@@ -52,5 +47,11 @@ public interface DetailContract {
          * @return Story의 복사본
          */
         StoryDTO copyDetailStoryItem();
+
+        /**
+         * Presenter가 Adapter의 Model 부분에 접근할 수 있도록 View로부터 세팅받는 메소드
+         * @param adapterModel Adapter
+         */
+        void setAdapterModel(ThumbnailViewPagerAdapterModel adapterModel);
     }
 }

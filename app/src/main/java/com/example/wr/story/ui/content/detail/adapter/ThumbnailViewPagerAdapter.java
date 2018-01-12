@@ -16,7 +16,7 @@ import lombok.Setter;
  * Created by WR on 2018-01-08.
  */
 
-public class ThumbnailViewPagerAdapter extends FragmentStatePagerAdapter implements OnStoryDisplayModeChangedListener {
+public class ThumbnailViewPagerAdapter extends FragmentStatePagerAdapter implements ThumbnailViewPagerAdapterModel, OnStoryDisplayModeChangedListener {
 
     @Setter private OnImageListChangedListener imageListChangedListener;
     @Setter private List<String> imagePathList;
@@ -71,6 +71,7 @@ public class ThumbnailViewPagerAdapter extends FragmentStatePagerAdapter impleme
 
     public void addImagePathList (List<String> addItemList) {
         imagePathList.addAll(addItemList);
+        notifyDataSetChanged();
     }
 
     public int getImageCount() {

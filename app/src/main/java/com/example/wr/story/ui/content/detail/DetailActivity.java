@@ -163,7 +163,9 @@ public class DetailActivity extends BaseActivity implements DetailContract.View 
             }
         });
         adapter.setImageListChangedListener(list -> updateIndicatorText(viewPager.getCurrentItem()));
+        presenter.setAdapterModel(adapter);
         viewPager.setAdapter(adapter);
+        //Thumbnail 개수 indicator listener 설정
         viewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
@@ -182,7 +184,7 @@ public class DetailActivity extends BaseActivity implements DetailContract.View 
 
     /**
      * 현재 편집중인 아이템을 제공하는 메소드.
-     * 부모/자식간 동일한 루틴에서 타겟 아이템만 다른경우에 이 메소드로 아이템을 제공받는다.
+     * 부모/자식 액티비티의 동일한 루틴에서 타겟 아이템만 다른경우에 이 메소드로 아이템을 제공받는다.
      * @return 편집중인 아이템
      */
     protected StoryDTO getDetailedStoryItem() {
@@ -218,11 +220,6 @@ public class DetailActivity extends BaseActivity implements DetailContract.View 
 
     /////////////////////////////////
     // Contract method 구현
-
-    @Override
-    public ThumbnailViewPagerAdapter getThumbnailAdapter() {
-        return adapter;
-    }
 
     @Override
     public void onGetStory() {

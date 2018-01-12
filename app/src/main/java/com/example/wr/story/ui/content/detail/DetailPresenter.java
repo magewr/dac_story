@@ -4,6 +4,7 @@ import com.example.wr.story.data.local.dto.StoryDTO;
 import com.example.wr.story.interactor.GetStoryById;
 import com.example.wr.story.interactor.UpdateStory;
 import com.example.wr.story.ui.base.Presenter;
+import com.example.wr.story.ui.content.detail.adapter.ThumbnailViewPagerAdapterModel;
 import com.example.wr.story.ui.exception.NoPictureException;
 import com.example.wr.story.ui.exception.StoryNotFoundException;
 import com.example.wr.story.ui.listener.PresenterResultListener;
@@ -23,10 +24,11 @@ import io.reactivex.observers.DisposableSingleObserver;
 public class DetailPresenter extends Presenter<DetailContract.View> implements DetailContract.Presenter  {
 
     //UseCase
-    private GetStoryById getStoryById;
-    private UpdateStory updateStory;
+    GetStoryById getStoryById;
+    UpdateStory updateStory;
     //Repository에서 받은 원본 Story Item
-    private StoryDTO detailStoryItem;
+    StoryDTO detailStoryItem;
+    ThumbnailViewPagerAdapterModel adapterModel;
 
     @Inject
     DetailPresenter(GetStoryById getStoryById, UpdateStory updateStory){
@@ -91,8 +93,12 @@ public class DetailPresenter extends Presenter<DetailContract.View> implements D
 
     @Override
     public void onPictureAdded(List<String> imagePath) {
-        getView().getThumbnailAdapter().addImagePathList(imagePath);
-        getView().getThumbnailAdapter().notifyDataSetChanged();
+        adapterModel.addImagePathList(imagePath);
+    }
+
+    @Override
+    public void setAdapterModel(ThumbnailViewPagerAdapterModel adapterModel) {
+        this.adapterModel = adapterModel;
     }
 
     @Override
