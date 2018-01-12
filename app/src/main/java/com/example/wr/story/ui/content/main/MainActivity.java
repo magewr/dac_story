@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -31,7 +32,7 @@ import butterknife.OnClick;
  * Created by WR.
  */
 
-public class MainActivity extends BaseActivity implements MainContract.View, AppBarLayout.OnOffsetChangedListener {
+public class MainActivity extends BaseActivity implements MainContract.View, AppBarLayout.OnOffsetChangedListener, SwipeRefreshLayout.OnRefreshListener {
 
     public static Intent getCallingIntent(Context context) {
         Intent intent = new Intent(context, MainActivity.class);
@@ -47,6 +48,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, App
     @BindView(R.id.fab_menu)                FloatingActionMenu fabMenu;
     @BindView(R.id.floating_search_view)    FloatingSearchView mSearchView;
     @BindView(R.id.appbar)                  AppBarLayout mAppBar;
+    @BindView(R.id.story_refresh_layout)    SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
     protected int getLayoutId() {
@@ -72,10 +74,13 @@ public class MainActivity extends BaseActivity implements MainContract.View, App
         initSearchView();
         fabMenu.setClosedOnTouchOutside(true);
         mAppBar.addOnOffsetChangedListener(this);
+        swipeRefreshLayout.setOnRefreshListener(this);
     }
 
     @Override
     public void onRecyclerViewAdapterUpdated() {
+        if (swipeRefreshLayout.isRefreshing())
+            swipeRefreshLayout.setRefreshing(false);
     }
 
     private void initRecyclerView() {
@@ -143,5 +148,11 @@ public class MainActivity extends BaseActivity implements MainContract.View, App
             return;
 
         super.onBackPressed();
+    }
+
+    @Override
+    public void onRefresh() {
+        swipeRefreshLayout.setRefreshing(true);
+        presenter.getStoryList();
     }
 }
