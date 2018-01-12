@@ -25,6 +25,7 @@ import io.reactivex.observers.DisposableObserver;
 import io.reactivex.observers.DisposableSingleObserver;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
@@ -50,7 +51,7 @@ public class MainPresenterTest {
     @Mock private StorySectionAdapterModel adapterModel;
 
     @Mock private DisposableCompletableObserver removeCallBack;
-    @Mock private DisposableObserver<List<StoryDTO>> getStoryListCallBack;
+    @Mock private MainPresenter.GetStoryListObserver getStoryListCallBack;
     @Mock private DisposableSingleObserver<List<StoryDTO>> getStoryListByStringCallBack;
 
     @Mock private List<StoryDTO> storyList;
@@ -74,11 +75,6 @@ public class MainPresenterTest {
         }).when(removeStory).execute(any(DisposableCompletableObserver.class), any(StoryDTO.class));
 
         doAnswer(invocation -> {
-            ((DisposableObserver<List<StoryDTO>>) invocation.getArguments()[0]).onNext(storyList);
-            return null;
-        }).when(getStoryList).execute(any(DisposableObserver.class), any(Boolean.class));
-
-        doAnswer(invocation -> {
             ((DisposableSingleObserver<List<StoryDTO>> ) invocation.getArguments()[0]).onSuccess(storyList);
             return null;
         }).when(getStoryListByString).execute(any(DisposableSingleObserver.class), any(String.class));
@@ -86,23 +82,35 @@ public class MainPresenterTest {
 
     @Test
     public void testGetStoryList() {
+        doAnswer(invocation -> {
+            getStoryListCallBack.onNext(storyList);
+            return null;
+        }).when(getStoryList).execute(any(MainPresenter.GetStoryListObserver.class), any(Boolean.class));
+
         mainPresenter.getStoryList();
-        verify(getStoryListCallBack).onNext(storyList);
-        verify(getStoryListCallBack, never()).onError(any());
+        verify(mainPresenter.getView()).onRecyclerViewAdapterUpdated();
     }
 
     @Test
     public void testSearchStory() {
+        doAnswer(invocation -> {
+            getStoryListByStringCallBack.onSuccess(storyList);
+            return null;
+        }).when(getStoryListByString).execute(any(DisposableSingleObserver.class), any(String.class));
+
         mainPresenter.searchStory("test");
-        verify(getStoryListByStringCallBack, times(1)).onSuccess(storyList);
-        verify(getStoryListByStringCallBack, never()).onError(any());
+        verify(mainPresenter.adapterModel).setNewData(any(List.class), anyBoolean());
     }
 
     @Test
     public void testRemoveStory() {
+        doAnswer(invocation -> {
+            removeCallBack.onComplete();
+            return null;
+        }).when(removeStory).execute(any(DisposableCompletableObserver.class), any(StoryDTO.class));
+
         mainPresenter.removeStoryItem(0, presenterResultListener);
-        verify(removeCallBack, times(1)).onComplete();
-        verify(removeCallBack, never()).onError(any());
-        verify(getStoryListCallBack).onNext(storyList);
+        verify(presenterResultListener, times(1)).onResult(eq(true), anyString());
+        verify(presenterResultListener, never()).onResult(eq(true), anyString());
     }
 }

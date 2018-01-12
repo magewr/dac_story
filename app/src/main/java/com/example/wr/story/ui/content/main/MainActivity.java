@@ -85,9 +85,12 @@ public class MainActivity extends BaseActivity implements MainContract.View, App
 
     private void initRecyclerView() {
         storyRecyclerView.setLayoutManager(new GridLayoutManager(this,2));
+        //Adapter 바인딩될 뷰 설정
         adapter = new StorySectionAdapter(R.layout.recyclerview_story_item_content, R.layout.recyclerview_story_section_header, null);
         adapter.openLoadAnimation();
         adapter.setEmptyView(R.layout.recyclerview_noitem_bg, (ViewGroup)storyRecyclerView.getParent());
+
+        //Adapter 클릭 리스너 설정
         adapter.setOnItemClickListener((BaseQuickAdapter adapter, View view, int position) ->
                 presenter.onStoryItemSelected(position));
         adapter.setOnItemChildClickListener((adapter1, view, position) -> {
@@ -99,6 +102,8 @@ public class MainActivity extends BaseActivity implements MainContract.View, App
             });
         });
         storyRecyclerView.setAdapter(adapter);
+
+        //Adapter 스크롤리스너 설정(아래로 스크롤 시 FAB 숨기고 위로 스크롤 시 나타남)
         storyRecyclerView.clearOnScrollListeners();
         storyRecyclerView.addOnScrollListener(new HidingScrollListener() {
             @Override
@@ -111,6 +116,8 @@ public class MainActivity extends BaseActivity implements MainContract.View, App
                 fabMenu.showMenu(true);
             }
         });
+
+        //Presenter에 Adapter 제공
         presenter.setAdapterModel(adapter);
     }
 
@@ -139,6 +146,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, App
 
     @Override
     public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+        //스크롤 상하 변동 시 searchview도 동일하게 이동
         mSearchView.setTranslationY(verticalOffset);
     }
 
@@ -150,6 +158,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, App
         super.onBackPressed();
     }
 
+    //SwipeRefreshLayout Implements
     @Override
     public void onRefresh() {
         swipeRefreshLayout.setRefreshing(true);
