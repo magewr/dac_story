@@ -9,6 +9,7 @@ import com.example.wr.story.ui.exception.NoPictureException;
 import com.example.wr.story.ui.exception.StoryNotFoundException;
 import com.example.wr.story.ui.listener.PresenterResultListener;
 import com.example.wr.story.ui.listener.SimpleDisposableCompletableObserver;
+import com.example.wr.story.ui.listener.SimpleDisposableSingleObserver;
 
 import java.util.List;
 
@@ -51,7 +52,7 @@ public class DetailPresenter extends Presenter<DetailContract.View> implements D
 
     @Override
     public void setStoryById(long storyId, PresenterResultListener listener) {
-        getStoryById.execute(new DisposableSingleObserver<StoryDTO>() {
+        getStoryById.execute(new SimpleDisposableSingleObserver<StoryDTO>() {
             @Override
             public void onSuccess(StoryDTO storyDTO) {
                 //Story를 못찾을 경우 에러처리
@@ -62,17 +63,14 @@ public class DetailPresenter extends Presenter<DetailContract.View> implements D
                 detailStoryItem = storyDTO;
                 getView().onGetStory();
                 listener.onResult(true, null);
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                listener.onResult(false, e.getMessage());
-            }
-        }, storyId);
+            }}, storyId);
     }
 
     @Override
     public void updateStory(StoryDTO item, PresenterResultListener listener) {
+        if (currentDisplayMode == DisplayMode.ViewMode)
+            return;
+
         // 사진이 하나도 없을경우 저장불가 - 에러처리
         if (item.getImagePathList().size() == 0) {
             listener.onResult(false, new NoPictureException().getMessage());
@@ -92,6 +90,8 @@ public class DetailPresenter extends Presenter<DetailContract.View> implements D
 
     @Override
     public void onPictureAdded(List<String> imagePath) {
+        if (currentDisplayMode == DisplayMode.ViewMode)
+            return;
         adapterModel.addImagePathList(imagePath);
     }
 
@@ -132,6 +132,7 @@ public class DetailPresenter extends Presenter<DetailContract.View> implements D
 
     @Override
     public void calculatePageIndicatorIndex(int position) {
+        // 편집모드에서는 마지막 사진추가 아이템이 있어서 실제 사진 갯수와 다르기에 계산해줌
         int imagePosition = ++position > adapterModel.getImageCount() ? --position : position;
         getView().setViewPagerIndicatorText(imagePosition, adapterModel.getImageCount());
     }
