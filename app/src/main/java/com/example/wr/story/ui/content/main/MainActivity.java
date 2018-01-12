@@ -19,6 +19,7 @@ import com.example.wr.story.di.module.ActivityModule;
 import com.example.wr.story.ui.base.BaseActivity;
 import com.example.wr.story.ui.content.main.adapter.StorySectionAdapter;
 import com.example.wr.story.ui.listener.HidingScrollListener;
+import com.example.wr.story.ui.util.AndroidUtil;
 import com.example.wr.story.ui.util.Navigator;
 import com.github.clans.fab.FloatingActionMenu;
 
@@ -152,16 +153,24 @@ public class MainActivity extends BaseActivity implements MainContract.View, App
 
     @Override
     public void onBackPressed() {
+        // 검색중일 경우에는 아무 일도 일어나지 않도록
         if (mSearchView.setSearchFocused(false) == true)
             return;
-
-        super.onBackPressed();
+        // 아이템이 검색된 상태일 경우에는 쿼리 초기화
+        if (mSearchView.getQuery().isEmpty() == false) {
+            mSearchView.clearQuery();
+            presenter.getStoryList();
+            return;
+        }
+        // 종료 전 종료 확인 AlertDialog 띄움
+        AndroidUtil.showAlertDialog(this, R.string.main_dialog_exit_message, (dialogInterface, i) -> finish());
     }
 
     //SwipeRefreshLayout Implements
     @Override
     public void onRefresh() {
         swipeRefreshLayout.setRefreshing(true);
+        mSearchView.clearQuery();
         presenter.getStoryList();
     }
 }

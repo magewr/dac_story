@@ -58,8 +58,10 @@ public class MainPresenter extends Presenter<MainContract.View> implements MainC
 
     @Override
     public void onStoryItemSelected(int position) {
-        long id = adapterModel.getStoryItem(position).getId();
-        getView().showDetailActivityByStoryId(id);
+        if (adapterModel.getStoryItem(position) != null) {
+            long id = adapterModel.getStoryItem(position).getId();
+            getView().showDetailActivityByStoryId(id);
+        }
     }
 
     @Override

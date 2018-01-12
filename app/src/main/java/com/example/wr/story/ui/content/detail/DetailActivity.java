@@ -16,6 +16,7 @@ import com.example.wr.story.ui.base.BaseActivity;
 import com.example.wr.story.ui.content.detail.adapter.ThumbnailViewPagerAdapter;
 import com.example.wr.story.ui.listener.OnItemClickListener;
 import com.example.wr.story.ui.listener.OnStoryDisplayModeChangedListener.DisplayMode;
+import com.example.wr.story.ui.util.AndroidUtil;
 import com.example.wr.story.ui.util.Navigator;
 import com.example.wr.story.ui.util.StoryItemUtil;
 import com.github.clans.fab.FloatingActionButton;
@@ -199,7 +200,9 @@ public class DetailActivity extends BaseActivity implements DetailContract.View 
      */
     protected boolean handleOnBackPressed() {
         if (currentDisplayMode == DisplayMode.EditMode) {
-            rollbackModifiedStory();
+            AndroidUtil.showAlertDialog(this, R.string.detail_dialog_cancel_modify_message, (dialogInterface, i) -> {
+                rollbackModifiedStory();
+            });
             return true;
         }
         return false;
