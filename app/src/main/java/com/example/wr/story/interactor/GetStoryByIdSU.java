@@ -13,9 +13,9 @@ import io.reactivex.Single;
  * Created by WR.
  */
 
-public class GetStoryById extends SingleUseCase<StoryDTO, Long> {
+public class GetStoryByIdSU extends SingleUseCase<StoryDTO, Long> {
     @Inject
-    GetStoryById(DataRepository dataRepository) {
+    GetStoryByIdSU(DataRepository dataRepository) {
         super(dataRepository);
     }
 

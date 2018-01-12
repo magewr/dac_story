@@ -20,13 +20,13 @@ import static org.mockito.Mockito.verify;
 @RunWith(MockitoJUnitRunner.class)
 public class AddStoryTest {
 
-    private AddStory addStory;
+    private AddStoryCU addStory;
     @Mock DataRepository dataRepository;
 
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        addStory = new AddStory(dataRepository);
+        addStory = new AddStoryCU(dataRepository);
     }
 
     @Test

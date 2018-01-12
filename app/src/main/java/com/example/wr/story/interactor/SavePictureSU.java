@@ -11,10 +11,10 @@ import io.reactivex.Single;
  * Created by WR on 2018-01-10.
  */
 
-public class SavePicture extends SingleUseCase<String, SavePicture.Params> {
+public class SavePictureSU extends SingleUseCase<String, SavePictureSU.Params> {
 
     @Inject
-    protected SavePicture(DataRepository dataRepository) {
+    protected SavePictureSU(DataRepository dataRepository) {
         super(dataRepository);
     }
 

@@ -11,6 +11,8 @@ import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by WR.
+ * UseCase 중 CompletableObserver 를 사용하는 경우의 추상 클래스
+ * CompletableObserver 이므로 결과는 Complete, Error 가 존재한다.
  */
 
 public abstract class CompletableUseCase<Param> {

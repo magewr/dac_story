@@ -1,8 +1,8 @@
 package com.example.wr.story.ui.content.detail;
 
 import com.example.wr.story.data.local.dto.StoryDTO;
-import com.example.wr.story.interactor.GetStoryById;
-import com.example.wr.story.interactor.UpdateStory;
+import com.example.wr.story.interactor.GetStoryByIdSU;
+import com.example.wr.story.interactor.UpdateStoryCU;
 import com.example.wr.story.ui.base.Presenter;
 import com.example.wr.story.ui.content.detail.adapter.ThumbnailViewPagerAdapterModel;
 import com.example.wr.story.ui.exception.NoPictureException;
@@ -15,8 +15,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import io.reactivex.observers.DisposableSingleObserver;
-
 /**
  * Created by WR.
  */
@@ -24,8 +22,8 @@ import io.reactivex.observers.DisposableSingleObserver;
 public class DetailPresenter extends Presenter<DetailContract.View> implements DetailContract.Presenter  {
 
     //UseCase
-    GetStoryById getStoryById;
-    UpdateStory updateStory;
+    GetStoryByIdSU getStoryById;
+    UpdateStoryCU updateStory;
     //Repository에서 받은 원본 Story Item
     StoryDTO detailStoryItem;
     ThumbnailViewPagerAdapterModel adapterModel;
@@ -33,7 +31,7 @@ public class DetailPresenter extends Presenter<DetailContract.View> implements D
     DisplayMode currentDisplayMode;
 
     @Inject
-    DetailPresenter(GetStoryById getStoryById, UpdateStory updateStory){
+    DetailPresenter(GetStoryByIdSU getStoryById, UpdateStoryCU updateStory){
         this.getStoryById = getStoryById;
         this.updateStory = updateStory;
     }

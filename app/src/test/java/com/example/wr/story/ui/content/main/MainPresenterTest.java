@@ -1,9 +1,9 @@
 package com.example.wr.story.ui.content.main;
 
 import com.example.wr.story.data.local.dto.StoryDTO;
-import com.example.wr.story.interactor.GetStoryList;
-import com.example.wr.story.interactor.GetStoryListByString;
-import com.example.wr.story.interactor.RemoveStory;
+import com.example.wr.story.interactor.GetStoryListOU;
+import com.example.wr.story.interactor.GetStoryListByStringSU;
+import com.example.wr.story.interactor.RemoveStoryCU;
 import com.example.wr.story.ui.content.TestStoryItemGenerator;
 import com.example.wr.story.ui.content.main.adapter.StorySectionAdapterModel;
 
@@ -27,9 +27,9 @@ public class MainPresenterTest {
 
     private MainPresenter mainPresenter;
 
-    @Mock private GetStoryList getStoryList;
-    @Mock private RemoveStory removeStory;
-    @Mock private GetStoryListByString getStoryListByString;
+    @Mock private GetStoryListOU getStoryList;
+    @Mock private RemoveStoryCU removeStory;
+    @Mock private GetStoryListByStringSU getStoryListByString;
     @Mock private MainContract.View view;
     @Mock private StorySectionAdapterModel adapterModel;
 

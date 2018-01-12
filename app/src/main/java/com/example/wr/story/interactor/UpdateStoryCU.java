@@ -12,15 +12,15 @@ import io.reactivex.Completable;
  * Created by WR.
  */
 
-public class AddStory extends CompletableUseCase<StoryDTO> {
+public class UpdateStoryCU extends CompletableUseCase<StoryDTO> {
     @Inject
-    AddStory(DataRepository dataRepository) {
+    UpdateStoryCU(DataRepository dataRepository) {
         super(dataRepository);
         this.dataRepository = dataRepository;
     }
 
     @Override
     protected Completable buildUseCaseCompletable(StoryDTO storyDTO) {
-        return dataRepository.addStoryDto(storyDTO);
+        return dataRepository.updateStoryDto(storyDTO);
     }
 }

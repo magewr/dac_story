@@ -1,8 +1,8 @@
 package com.example.wr.story.ui.content.detail;
 
 import com.example.wr.story.data.local.dto.StoryDTO;
-import com.example.wr.story.interactor.GetStoryById;
-import com.example.wr.story.interactor.UpdateStory;
+import com.example.wr.story.interactor.GetStoryByIdSU;
+import com.example.wr.story.interactor.UpdateStoryCU;
 import com.example.wr.story.ui.content.TestStoryItemGenerator;
 import com.example.wr.story.ui.content.detail.adapter.ThumbnailViewPagerAdapterModel;
 import com.example.wr.story.ui.listener.PresenterResultListener;
@@ -30,8 +30,10 @@ public class DetailPresenterTest {
     private DetailPresenter detailPresenter;
 
     @Mock DetailContract.View view;
-    @Mock GetStoryById getStoryById;
-    @Mock UpdateStory updateStory;
+    @Mock
+    GetStoryByIdSU getStoryById;
+    @Mock
+    UpdateStoryCU updateStory;
     @Mock ThumbnailViewPagerAdapterModel adapterModel;
     @Mock PresenterResultListener presenterResultListener;
 

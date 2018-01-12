@@ -14,9 +14,9 @@ import io.reactivex.Observable;
  * Created by WR.
  */
 
-public class GetStoryList extends ObservableUseCase<List<StoryDTO>, Boolean> {
+public class GetStoryListOU extends ObservableUseCase<List<StoryDTO>, Boolean> {
     @Inject
-    GetStoryList(DataRepository dataRepository) {
+    GetStoryListOU(DataRepository dataRepository) {
         super(dataRepository);
         this.dataRepository = dataRepository;
     }

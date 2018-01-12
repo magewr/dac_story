@@ -12,9 +12,9 @@ import io.reactivex.Completable;
  * Created by WR.
  */
 
-public class RemoveStory extends CompletableUseCase<StoryDTO> {
+public class RemoveStoryCU extends CompletableUseCase<StoryDTO> {
     @Inject
-    RemoveStory(DataRepository dataRepository) {
+    RemoveStoryCU(DataRepository dataRepository) {
         super(dataRepository);
         this.dataRepository = dataRepository;
     }

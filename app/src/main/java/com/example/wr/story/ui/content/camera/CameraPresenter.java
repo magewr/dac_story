@@ -1,6 +1,6 @@
 package com.example.wr.story.ui.content.camera;
 
-import com.example.wr.story.interactor.SavePicture;
+import com.example.wr.story.interactor.SavePictureSU;
 import com.example.wr.story.ui.base.Presenter;
 import com.example.wr.story.ui.listener.PresenterResultListener;
 
@@ -14,10 +14,10 @@ import io.reactivex.observers.DisposableSingleObserver;
 
 public class CameraPresenter extends Presenter<CameraContract.View> implements CameraContract.Presenter {
 
-    SavePicture savePicture;
+    SavePictureSU savePicture;
 
     @Inject
-    CameraPresenter(SavePicture savePicture){
+    CameraPresenter(SavePictureSU savePicture){
         this.savePicture = savePicture;
     }
 
@@ -34,7 +34,7 @@ public class CameraPresenter extends Presenter<CameraContract.View> implements C
             public void onError(Throwable e) {
                 listener.onResult(false, e.getMessage());
             }
-        }, SavePicture.Params.makeParams(imagePath, data));
+        }, SavePictureSU.Params.makeParams(imagePath, data));
     }
 
     @Override

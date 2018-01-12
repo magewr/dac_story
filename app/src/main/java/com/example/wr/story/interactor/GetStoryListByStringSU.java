@@ -14,7 +14,7 @@ import io.reactivex.Single;
  * Created by WR on 2018-01-10.
  */
 
-public class GetStoryListByString extends SingleUseCase<List<StoryDTO>, String> {
+public class GetStoryListByStringSU extends SingleUseCase<List<StoryDTO>, String> {
 
     @Override
     protected Single<List<StoryDTO>> buildUseCaseSingle(String s) {
@@ -22,7 +22,7 @@ public class GetStoryListByString extends SingleUseCase<List<StoryDTO>, String> 
     }
 
     @Inject
-    protected GetStoryListByString(DataRepository dataRepository) {
+    protected GetStoryListByStringSU(DataRepository dataRepository) {
         super(dataRepository);
     }
 }
