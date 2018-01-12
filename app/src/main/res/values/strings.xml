@@ -14,7 +14,7 @@
 
     <string name="detail_edittext_hint_title">제목</string>
     <string name="detail_edittext_hint_memo">메모</string>
-    <string name="detail_dialog_cancel_modify_message">수정을 취소하시겠습니까?</string>
+    <string name="detail_dialog_cancel_message">취소하시겠습니까?</string>
     <string name="detail_toast_modify_success">수정되었습니다.</string>
     <string name="detail_toast_modify_error">수정 실패 : </string>
     <string name="detail_toast_add_success">생성되었습니다.</string>

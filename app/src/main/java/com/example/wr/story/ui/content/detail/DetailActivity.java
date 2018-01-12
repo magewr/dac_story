@@ -218,7 +218,7 @@ public class DetailActivity extends BaseActivity implements DetailContract.View 
 
     @Override
     public void showCancelEditingAlertDialog() {
-        AndroidUtil.showAlertDialog(this, R.string.detail_dialog_cancel_modify_message, (dialogInterface, i) -> {
+        AndroidUtil.showAlertDialog(this, R.string.detail_dialog_cancel_message, (dialogInterface, i) -> {
             rollbackModifiedStory();
         });
     }

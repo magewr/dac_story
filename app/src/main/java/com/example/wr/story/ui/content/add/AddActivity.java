@@ -9,6 +9,8 @@ import com.example.wr.story.data.local.dto.StoryDTO;
 import com.example.wr.story.di.module.ActivityModule;
 import com.example.wr.story.ui.content.detail.DetailActivity;
 import com.example.wr.story.ui.content.detail.DisplayMode;
+import com.example.wr.story.ui.util.AndroidUtil;
+import com.example.wr.story.ui.util.StoryItemUtil;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -68,5 +70,10 @@ public class AddActivity extends DetailActivity {
             else
                 Toast.makeText(this, getString(R.string.detail_toast_add_error) + msg, Toast.LENGTH_SHORT).show();
         });
+    }
+
+    @Override
+    public void showCancelEditingAlertDialog() {
+        AndroidUtil.showAlertDialog(this, R.string.detail_dialog_cancel_message, (dialogInterface, i) -> finish());
     }
 }
