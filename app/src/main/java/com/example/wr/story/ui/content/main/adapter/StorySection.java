@@ -8,11 +8,10 @@ import lombok.Setter;
 
 /**
  * Created by WR.
+ * 오픈소스 BRVAH의 Section Adapter를 사용하기 위한 Wrapper 클래스
  */
 
 public class StorySection extends SectionEntity<StoryDTO> {
-    @Getter @Setter int count;
-
     public StorySection(boolean isHeader, String header) {
         super(isHeader, header);
     }
