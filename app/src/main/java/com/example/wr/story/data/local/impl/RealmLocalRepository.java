@@ -42,7 +42,7 @@ public class RealmLocalRepository implements LocalRepository {
     private List<StoryDTO> getSortedStoryList() {
         results = realm().where(StoryDAO.class).findAllSorted("date", Sort.DESCENDING);
         results.addChangeListener((storyDAOS, changeSet) ->
-            itemListBehaviorSubject.onNext(StoryMapper.convertList(storyDAOS))
+            itemListBehaviorSubject.onNext(StoryMapper.convertList(results))
         );
         ArrayList<StoryDTO> storyList = new ArrayList<>();
         storyList.addAll(StoryMapper.convertList(results));
@@ -51,23 +51,23 @@ public class RealmLocalRepository implements LocalRepository {
 
     @Override
     public Single<StoryDTO> getStoryDTOById(long id) {
-        Single<StoryDTO> sampleStoryDTOListObservable = Single.create(emitter -> {
+        Single<StoryDAO> sampleStoryDTOListObservable = Single.create(emitter -> {
             try {
                 StoryDAO results = realm()
                         .where(StoryDAO.class)
                         .equalTo("id", id)
                         .findFirst();
-                emitter.onSuccess(StoryMapper.convertItem(results));
+                emitter.onSuccess(results);
             }catch (Exception e) {
                 emitter.onError(e);
             }
         });
-        return sampleStoryDTOListObservable;
+        return sampleStoryDTOListObservable.map(StoryMapper::convertItem);
     }
 
     @Override
     public Single<List<StoryDTO>> getStoryListByString(String string) {
-        Single<List<StoryDTO>> sampleStoryDTOListSingle = Single.create(emitter -> {
+        Single<List<StoryDAO>> sampleStoryDTOListSingle = Single.create(emitter -> {
             try {
                 RealmResults<StoryDAO> results = realm()
                         .where(StoryDAO.class)
@@ -75,12 +75,12 @@ public class RealmLocalRepository implements LocalRepository {
                         .or()
                         .contains("memo", string)
                         .findAllSorted("date", Sort.DESCENDING);
-                emitter.onSuccess(StoryMapper.convertList(results));
+                emitter.onSuccess(results);
             }catch (Exception e) {
                 emitter.onError(e);
             }
         });
-        return sampleStoryDTOListSingle;
+        return sampleStoryDTOListSingle.map(StoryMapper::convertList);
     }
 
     @Override
