@@ -63,11 +63,13 @@ public class MainPresenter extends Presenter<MainContract.View> implements MainC
 
     @Override
     public void getStoryList() {
+        getView().showRefresh(true);
         getStoryList.execute(new GetStoryListObserver(), new Boolean(false));
     }
 
     @Override
     public void getSampleStoryList() {
+        getView().showRefresh(true);
         getStoryList.execute(new GetStoryListObserver(), new Boolean(true));
     }
 
@@ -87,11 +89,38 @@ public class MainPresenter extends Presenter<MainContract.View> implements MainC
         }, string);
     }
 
+    @Override
+    public void handleOnBackPressed() {
+        // 검색창이 포커스를 가지고 있을 경우 검색창의 포커스를 해제하고 이벤트 무시
+        if (getView().setSearchFocusIfChangeable(false))
+            return;
+        // 검색창에 텍스트가 존재할경우(검색중) 텍스트를 제거한 뒤 이벤트 무시
+        if (getView().hasSearchViewQueryString()) {
+            getView().clearSearchVIewQueryString();
+            return;
+        }
+        // 종료 가능한 상황일경우 종료 AlertDialog 출력
+        getView().showFinishAlertDialog();
+    }
+
+    @Override
+    public void handleOnSwipeRefresh() {
+        getView().clearSearchVIewQueryString();
+        getStoryList();
+    }
+
     class GetStoryListObserver extends SimpleDisposableObserver<List<StoryDTO>> {
         @Override
         public void onNext(List<StoryDTO> storyDTOS) {
+            getView().showRefresh(false);
             adapterModel.setNewData(StoryItemUtil.createSectionFromStory(storyDTOS), false);
             getView().onRecyclerViewAdapterUpdated();
+        }
+
+        @Override
+        public void onError(Throwable e) {
+            getView().showRefresh(false);
+            super.onError(e);
         }
     }
 

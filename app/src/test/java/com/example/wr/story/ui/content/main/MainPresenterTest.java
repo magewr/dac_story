@@ -14,7 +14,9 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -50,6 +52,28 @@ public class MainPresenterTest {
     public void testOnItemClicked() {
         mainPresenter.onStoryItemSelected(0);
         verify(view).showDetailActivityByStoryId(storyItem.getId());
+    }
+
+    @Test
+    public void testHandleBackPressed() {
+        // 검색창이 포커스가 가지고 있을 경우에는 백프레스가 들어와도 종료되면 안된다.
+        when(view.setSearchFocusIfChangeable(false)).thenReturn(true);
+        when(view.hasSearchViewQueryString()).thenReturn(false);
+        mainPresenter.handleOnBackPressed();
+        verify(view, never()).showFinishAlertDialog();
+
+        // 검색창에 Query가 있을 경우 백프레스가 들어오면 Query 를 제거하고 종료되면 안된다.
+        when(view.setSearchFocusIfChangeable(false)).thenReturn(false);
+        when(view.hasSearchViewQueryString()).thenReturn(true);
+        mainPresenter.handleOnBackPressed();
+        verify(view).clearSearchVIewQueryString();
+        verify(view, never()).showFinishAlertDialog();
+
+        // 그 외의 경우에는 종료 확인 AlertDialog를 띄운다.
+        when(view.setSearchFocusIfChangeable(false)).thenReturn(false);
+        when(view.hasSearchViewQueryString()).thenReturn(false);
+        mainPresenter.handleOnBackPressed();
+        verify(view).showFinishAlertDialog();
     }
 
 }

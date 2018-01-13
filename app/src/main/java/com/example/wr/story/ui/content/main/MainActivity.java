@@ -80,8 +80,6 @@ public class MainActivity extends BaseActivity implements MainContract.View, App
 
     @Override
     public void onRecyclerViewAdapterUpdated() {
-        if (swipeRefreshLayout.isRefreshing())
-            swipeRefreshLayout.setRefreshing(false);
     }
 
     private void initRecyclerView() {
@@ -131,6 +129,32 @@ public class MainActivity extends BaseActivity implements MainContract.View, App
         Navigator.toDetailActivity(this, storyId);
     }
 
+    @Override
+    public boolean setSearchFocusIfChangeable(boolean focus) {
+        return mSearchView.setSearchFocused(focus);
+    }
+
+    @Override
+    public boolean hasSearchViewQueryString() {
+        return !mSearchView.getQuery().isEmpty();
+    }
+
+    @Override
+    public void clearSearchVIewQueryString() {
+        mSearchView.clearQuery();
+        presenter.getStoryList();
+    }
+
+    @Override
+    public void showFinishAlertDialog() {
+        AndroidUtil.showAlertDialog(this, R.string.main_dialog_exit_message, (dialogInterface, i) -> finish());
+    }
+
+    @Override
+    public void showRefresh(boolean show) {
+        swipeRefreshLayout.setRefreshing(show);
+    }
+
     @OnClick({R.id.add_new_story, R.id.add_sample_data})
     public void onFabItemClick(View view) {
         switch (view.getId()) {
@@ -153,24 +177,13 @@ public class MainActivity extends BaseActivity implements MainContract.View, App
 
     @Override
     public void onBackPressed() {
-        // 검색중일 경우에는 아무 일도 일어나지 않도록
-        if (mSearchView.setSearchFocused(false) == true)
-            return;
-        // 아이템이 검색된 상태일 경우에는 쿼리 초기화
-        if (mSearchView.getQuery().isEmpty() == false) {
-            mSearchView.clearQuery();
-            presenter.getStoryList();
-            return;
-        }
-        // 종료 전 종료 확인 AlertDialog 띄움
-        AndroidUtil.showAlertDialog(this, R.string.main_dialog_exit_message, (dialogInterface, i) -> finish());
+        //Presenter에 BackPressed 처리
+        presenter.handleOnBackPressed();
     }
 
     //SwipeRefreshLayout Implements
     @Override
     public void onRefresh() {
-        swipeRefreshLayout.setRefreshing(true);
-        mSearchView.clearQuery();
-        presenter.getStoryList();
+        presenter.handleOnSwipeRefresh();
     }
 }

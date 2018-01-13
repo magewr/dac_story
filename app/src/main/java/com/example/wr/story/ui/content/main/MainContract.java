@@ -1,7 +1,6 @@
 package com.example.wr.story.ui.content.main;
 
 import com.example.wr.story.ui.base.BaseView;
-import com.example.wr.story.ui.content.main.adapter.StorySectionAdapter;
 import com.example.wr.story.ui.content.main.adapter.StorySectionAdapterModel;
 import com.example.wr.story.ui.listener.PresenterResultListener;
 
@@ -22,6 +21,35 @@ public interface MainContract{
          * @param storyId Item의 Id
          */
         void showDetailActivityByStoryId(long storyId);
+
+        /**
+         * SearchFocus를 param으로 변경
+         * @param focus focus
+         * @return focus isChanged
+         */
+        boolean setSearchFocusIfChangeable(boolean focus);
+
+        /**
+         * SearchView의 Query가 존재하는지 확인
+         * @return has QueryString
+         */
+        boolean hasSearchViewQueryString();
+
+        /**
+         * SearchView의 Query를 지움(초기화)
+         */
+        void clearSearchVIewQueryString();
+
+        /**
+         * 종료 Alert Dialog를 Show
+         */
+        void showFinishAlertDialog();
+
+        /**
+         * Progress Show/Hide
+         * @param show show
+         */
+        void showRefresh(boolean show);
     }
 
     interface Presenter {
@@ -59,5 +87,15 @@ public interface MainContract{
          * @param string 검색할 String
          */
         void searchStory(String string);
+
+        /**
+         * View에서 BackButtonPressed 이벤트를 처리
+         */
+        void handleOnBackPressed();
+
+        /**
+         * 당겨서 새로고침 이벤트 처리
+         */
+        void handleOnSwipeRefresh();
     }
 }
