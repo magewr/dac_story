@@ -11,12 +11,12 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.Single;
+import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.BehaviorSubject;
 import io.realm.Realm;
 import io.realm.RealmList;
@@ -154,7 +154,9 @@ public class RealmLocalRepository implements LocalRepository {
     //
     @Override
     public Observable<List<StoryDTO>> getSampleStoryDTOList() {
-        makeSampleStoryDAOList();
+        Completable.fromAction(this::makeSampleStoryDAOList)
+                .subscribeOn(Schedulers.io())
+                .subscribe(() -> {});
         return getStoryDTOList();
     }
 
