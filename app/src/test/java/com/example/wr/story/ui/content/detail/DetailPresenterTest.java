@@ -32,10 +32,8 @@ public class DetailPresenterTest {
     private DetailPresenter detailPresenter;
 
     @Mock DetailContract.View view;
-    @Mock
-    GetStoryByIdSU getStoryById;
-    @Mock
-    UpdateStoryCU updateStory;
+    @Mock GetStoryByIdSU getStoryById;
+    @Mock UpdateStoryCU updateStory;
     @Mock ThumbnailViewPagerAdapterModel adapterModel;
     @Mock PresenterResultListener presenterResultListener;
 
