@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import com.example.wr.story.ui.content.detail.DisplayMode;
 import com.example.wr.story.ui.listener.OnItemClickListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import lombok.Setter;
@@ -27,6 +28,7 @@ public class ThumbnailViewPagerAdapter extends FragmentStatePagerAdapter impleme
         super(fm);
         this.onItemClickListener = onItemClickListener;
         this.displayMode = displayMode;
+        this.imagePathList = new ArrayList<>();
     }
 
     @Override
