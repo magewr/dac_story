@@ -135,8 +135,8 @@ public class MainActivity extends BaseActivity implements MainContract.View, App
     }
 
     @Override
-    public boolean hasSearchViewQueryString() {
-        return !mSearchView.getQuery().isEmpty();
+    public String getSearchViewQueryString() {
+        return mSearchView.getQuery();
     }
 
     @Override

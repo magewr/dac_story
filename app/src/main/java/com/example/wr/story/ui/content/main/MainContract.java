@@ -30,10 +30,10 @@ public interface MainContract{
         boolean setSearchFocusIfChangeable(boolean focus);
 
         /**
-         * SearchView의 Query가 존재하는지 확인
-         * @return has QueryString
+         * SearchView의 QueryString를 제공
+         * @return QueryString
          */
-        boolean hasSearchViewQueryString();
+        String getSearchViewQueryString();
 
         /**
          * SearchView의 Query를 지움(초기화)

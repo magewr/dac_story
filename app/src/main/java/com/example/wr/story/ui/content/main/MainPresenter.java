@@ -37,7 +37,10 @@ public class MainPresenter extends BasePresenter<MainContract.View> implements M
     @Override
     public void onStartPresenter() {
         super.onStartPresenter();
-        getStoryList();
+        if (getView().getSearchViewQueryString().isEmpty())
+            getStoryList();
+        else
+            searchStory(getView().getSearchViewQueryString());
     }
 
     @Override
@@ -95,7 +98,7 @@ public class MainPresenter extends BasePresenter<MainContract.View> implements M
         if (getView().setSearchFocusIfChangeable(false))
             return;
         // 검색창에 텍스트가 존재할경우(검색중) 텍스트를 제거한 뒤 이벤트 무시
-        if (getView().hasSearchViewQueryString()) {
+        if (getView().getSearchViewQueryString().isEmpty() == false) {
             getView().clearSearchVIewQueryString();
             return;
         }
