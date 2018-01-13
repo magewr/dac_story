@@ -4,7 +4,7 @@ import com.example.wr.story.data.local.dto.StoryDTO;
 import com.example.wr.story.interactor.GetStoryListOU;
 import com.example.wr.story.interactor.GetStoryListByStringSU;
 import com.example.wr.story.interactor.RemoveStoryCU;
-import com.example.wr.story.ui.content.TestStoryItemGenerator;
+import com.example.wr.story.TestStoryItemGenerator;
 import com.example.wr.story.ui.content.main.adapter.StorySectionAdapterModel;
 
 import org.junit.Before;
@@ -14,7 +14,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;

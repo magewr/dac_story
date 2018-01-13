@@ -2,7 +2,7 @@ package com.example.wr.story.interactor;
 
 import com.example.wr.story.data.DataRepository;
 import com.example.wr.story.data.local.dto.StoryDTO;
-import com.example.wr.story.ui.content.TestStoryItemGenerator;
+import com.example.wr.story.TestStoryItemGenerator;
 
 import org.junit.Before;
 import org.junit.Test;

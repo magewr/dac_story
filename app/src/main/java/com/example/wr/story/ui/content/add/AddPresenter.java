@@ -2,7 +2,7 @@ package com.example.wr.story.ui.content.add;
 
 import com.example.wr.story.data.local.dto.StoryDTO;
 import com.example.wr.story.interactor.AddStoryCU;
-import com.example.wr.story.ui.base.Presenter;
+import com.example.wr.story.ui.base.BasePresenter;
 import com.example.wr.story.ui.exception.NoPictureException;
 import com.example.wr.story.ui.listener.PresenterResultListener;
 
@@ -14,7 +14,7 @@ import io.reactivex.observers.DisposableCompletableObserver;
  * Created by WR.
  */
 
-public class AddPresenter extends Presenter<AddContract.View> implements AddContract.Presenter  {
+public class AddPresenter extends BasePresenter<AddContract.View> implements AddContract.Presenter  {
 
     private AddStoryCU addStory;
 

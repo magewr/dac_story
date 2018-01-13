@@ -3,7 +3,7 @@ package com.example.wr.story.ui.content.detail;
 import com.example.wr.story.data.local.dto.StoryDTO;
 import com.example.wr.story.interactor.GetStoryByIdSU;
 import com.example.wr.story.interactor.UpdateStoryCU;
-import com.example.wr.story.ui.content.TestStoryItemGenerator;
+import com.example.wr.story.TestStoryItemGenerator;
 import com.example.wr.story.ui.content.detail.adapter.ThumbnailViewPagerAdapterModel;
 import com.example.wr.story.ui.listener.PresenterResultListener;
 import com.example.wr.story.ui.listener.SimpleDisposableCompletableObserver;

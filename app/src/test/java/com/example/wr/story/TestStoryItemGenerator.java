@@ -1,4 +1,4 @@
-package com.example.wr.story.ui.content;
+package com.example.wr.story;
 
 import com.example.wr.story.data.local.dto.StoryDTO;
 

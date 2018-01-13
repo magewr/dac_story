@@ -4,7 +4,7 @@ import com.example.wr.story.data.local.dto.StoryDTO;
 import com.example.wr.story.interactor.GetStoryListByStringSU;
 import com.example.wr.story.interactor.GetStoryListOU;
 import com.example.wr.story.interactor.RemoveStoryCU;
-import com.example.wr.story.ui.base.Presenter;
+import com.example.wr.story.ui.base.BasePresenter;
 import com.example.wr.story.ui.content.main.adapter.StorySectionAdapterModel;
 import com.example.wr.story.ui.listener.PresenterResultListener;
 import com.example.wr.story.ui.listener.SimpleDisposableCompletableObserver;
@@ -20,7 +20,7 @@ import javax.inject.Inject;
  * Created by WR.
  */
 
-public class MainPresenter extends Presenter<MainContract.View> implements MainContract.Presenter {
+public class MainPresenter extends BasePresenter<MainContract.View> implements MainContract.Presenter {
 
     GetStoryListOU getStoryList;
     RemoveStoryCU removeStory;

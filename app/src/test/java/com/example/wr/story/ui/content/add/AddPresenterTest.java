@@ -2,7 +2,7 @@ package com.example.wr.story.ui.content.add;
 
 import com.example.wr.story.data.local.dto.StoryDTO;
 import com.example.wr.story.interactor.AddStoryCU;
-import com.example.wr.story.ui.content.TestStoryItemGenerator;
+import com.example.wr.story.TestStoryItemGenerator;
 import com.example.wr.story.ui.listener.PresenterResultListener;
 
 import org.junit.Before;

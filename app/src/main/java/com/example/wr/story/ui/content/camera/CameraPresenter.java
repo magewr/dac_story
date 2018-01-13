@@ -1,7 +1,7 @@
 package com.example.wr.story.ui.content.camera;
 
 import com.example.wr.story.interactor.SavePictureSU;
-import com.example.wr.story.ui.base.Presenter;
+import com.example.wr.story.ui.base.BasePresenter;
 import com.example.wr.story.ui.listener.PresenterResultListener;
 
 import javax.inject.Inject;
@@ -12,7 +12,7 @@ import io.reactivex.observers.DisposableSingleObserver;
  * Created by WR on 2018-01-10.
  */
 
-public class CameraPresenter extends Presenter<CameraContract.View> implements CameraContract.Presenter {
+public class CameraPresenter extends BasePresenter<CameraContract.View> implements CameraContract.Presenter {
 
     SavePictureSU savePicture;
 

@@ -53,6 +53,9 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
+    androidTestCompile("com.android.support.test.espresso:espresso-contrib:2.2.2") {
+        exclude module: 'recyclerview-v7'
+    }
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     testCompile 'junit:junit:4.12'
     implementation 'javax.inject:javax.inject:1'

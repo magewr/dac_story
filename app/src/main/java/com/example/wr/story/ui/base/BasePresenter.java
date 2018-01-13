@@ -9,7 +9,7 @@ import lombok.Setter;
  * Created by WR.
  */
 
-public abstract class Presenter<T extends BaseView> {
+public abstract class BasePresenter<T extends BaseView> {
 
     @Getter @Setter
     private T view;

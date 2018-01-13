@@ -32,7 +32,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseView
      */
     protected abstract void initPresenter();
 
-    protected Presenter presenter;
+    protected BasePresenter presenter;
     protected ActivityComponent activityComponent;
 
     @Override

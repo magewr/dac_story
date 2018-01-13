@@ -3,7 +3,7 @@ package com.example.wr.story.ui.content.detail;
 import com.example.wr.story.data.local.dto.StoryDTO;
 import com.example.wr.story.interactor.GetStoryByIdSU;
 import com.example.wr.story.interactor.UpdateStoryCU;
-import com.example.wr.story.ui.base.Presenter;
+import com.example.wr.story.ui.base.BasePresenter;
 import com.example.wr.story.ui.content.detail.adapter.ThumbnailViewPagerAdapterModel;
 import com.example.wr.story.ui.exception.NoPictureException;
 import com.example.wr.story.ui.exception.StoryNotFoundException;
@@ -19,7 +19,7 @@ import javax.inject.Inject;
  * Created by WR.
  */
 
-public class DetailPresenter extends Presenter<DetailContract.View> implements DetailContract.Presenter  {
+public class DetailPresenter extends BasePresenter<DetailContract.View> implements DetailContract.Presenter  {
 
     //UseCase
     GetStoryByIdSU getStoryById;
