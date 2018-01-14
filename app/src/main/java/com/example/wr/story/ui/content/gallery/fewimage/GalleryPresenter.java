@@ -1,22 +1,16 @@
-package com.example.wr.story.ui.content.gallery;
+package com.example.wr.story.ui.content.gallery.fewimage;
 
 import android.graphics.Bitmap;
-import android.widget.Toast;
 
-import com.example.wr.story.R;
 import com.example.wr.story.ui.base.BasePresenter;
 import com.example.wr.story.ui.listener.SimpleDisposableObserver;
 import com.example.wr.story.ui.util.StoryItemUtil;
-import com.veinhorn.scrollgalleryview.MediaInfo;
-import com.veinhorn.scrollgalleryview.loader.DefaultImageLoader;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.observers.DefaultObserver;
 import io.reactivex.schedulers.Schedulers;
 
 /**

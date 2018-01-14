@@ -9,7 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import com.example.wr.story.ui.content.add.AddActivity;
 import com.example.wr.story.ui.content.camera.CameraActivity;
 import com.example.wr.story.ui.content.detail.DetailActivity;
-import com.example.wr.story.ui.content.gallery.GalleryActivity;
+import com.example.wr.story.ui.content.gallery.fewimage.GalleryActivity;
 import com.example.wr.story.ui.content.gallery.manyimage.ManyImageGalleryActivity;
 import com.example.wr.story.ui.content.main.MainActivity;
 

@@ -1,18 +1,15 @@
-package com.example.wr.story.ui.content.gallery;
+package com.example.wr.story.ui.content.gallery.fewimage;
 
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.view.WindowManager;
-import android.widget.Toast;
 
 import com.example.wr.story.R;
 import com.example.wr.story.di.module.ActivityModule;
 import com.example.wr.story.ui.base.BaseActivity;
 import com.example.wr.story.ui.util.AndroidUtil;
-import com.example.wr.story.ui.util.StoryItemUtil;
 import com.veinhorn.scrollgalleryview.MediaInfo;
 import com.veinhorn.scrollgalleryview.ScrollGalleryView;
 import com.veinhorn.scrollgalleryview.loader.DefaultImageLoader;
@@ -23,9 +20,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import butterknife.BindView;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.observers.DefaultObserver;
-import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by WR on 2018-01-08.

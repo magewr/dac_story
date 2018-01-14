@@ -52,7 +52,7 @@ public class SplashActivity extends BaseActivity implements SplashContract.View{
 
     public void moveToMainActivity() {
         new Handler().postDelayed(() ->
-                Navigator.toMainActivity(this), 5000);
+                Navigator.toMainActivity(this), 3000);
     }
 
     @Override

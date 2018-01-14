@@ -1,4 +1,4 @@
-package com.example.wr.story.ui.content.gallery;
+package com.example.wr.story.ui.content.gallery.fewimage;
 
 import android.graphics.Bitmap;
 

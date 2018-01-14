@@ -26,7 +26,7 @@
             android:name=".ui.content.main.MainActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.content.gallery.GalleryActivity"
+            android:name=".ui.content.gallery.fewimage.GalleryActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.content.detail.DetailActivity"
