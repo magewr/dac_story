@@ -9,6 +9,7 @@ import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.example.wr.story.R;
+import com.example.wr.story.di.module.ActivityModule;
 import com.example.wr.story.ui.base.BaseActivity;
 import com.example.wr.story.ui.util.AndroidUtil;
 import com.example.wr.story.ui.util.StoryItemUtil;
@@ -19,6 +20,8 @@ import com.veinhorn.scrollgalleryview.loader.DefaultImageLoader;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DefaultObserver;
@@ -28,7 +31,7 @@ import io.reactivex.schedulers.Schedulers;
  * Created by WR on 2018-01-08.
  */
 
-public class GalleryActivity extends BaseActivity {
+public class GalleryActivity extends BaseActivity implements GalleryContract.View{
 
     private static final String CLICKED_INDEX = "clickedIndex";
     private static final String IMAGE_LIST = "imageList";
@@ -39,6 +42,7 @@ public class GalleryActivity extends BaseActivity {
         return intent;
     }
 
+    @Inject GalleryPresenter presenter;
     @BindView(R.id.scroll_gallery_view) ScrollGalleryView scrollGalleryView;
     private int clickedIndex;
     private List<String> imagePathList;
@@ -50,10 +54,14 @@ public class GalleryActivity extends BaseActivity {
 
     @Override
     protected void initDagger() {
+        activityComponent = getApplicationComponent().activityComponent(new ActivityModule(this));
+        activityComponent.inject(this);
     }
 
     @Override
     protected void initPresenter() {
+        super.presenter = presenter;
+        presenter.setView(this);
     }
 
     @Override
@@ -75,25 +83,16 @@ public class GalleryActivity extends BaseActivity {
                 .setZoom(true)
                 .setFragmentManager(getSupportFragmentManager());
 
-        StoryItemUtil.getBitmapObservableFromImagePathList(imagePathList)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new DefaultObserver<Bitmap>() {
-                    @Override
-                    public void onNext(Bitmap bitmap) {
-                        scrollGalleryView.addMedia(MediaInfo.mediaLoader(new DefaultImageLoader(bitmap)));
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Toast.makeText(GalleryActivity.this, getString(R.string.error) + e.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        scrollGalleryView.setCurrentItem(clickedIndex);
-                    }
-                });
+        presenter.loadBitmapFromImagePathList(imagePathList);
     }
 
+    @Override
+    public void onBitmapReady(Bitmap bitmap) {
+        scrollGalleryView.addMedia(MediaInfo.mediaLoader(new DefaultImageLoader(bitmap)));
+    }
+
+    @Override
+    public void moveToClickedImage() {
+        scrollGalleryView.setCurrentItem(clickedIndex);
+    }
 }
