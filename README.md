@@ -1,3 +1,17 @@
+# About
+CleanArchitecture_Sample 를 Base로 제작된 간단한 사진 관리 앱
+
+- 연속적으로 사진을 촬영하여 제목, 메모와 함께 저장합니다.
+
+- 저장된 Story의 목록을 확인 가능하고 각각 상세 보기가 가능합니다.
+
+- 상세보기 시 사진 원본을 확인할 수 있으며 확대/축소가 가능합니다.
+
+- 저장된 Story는 사진, 제목, 메모가 편집이 가능하고 삭제가 가능합니다.
+
+- Story의 제목과 메모로 검색이 가능합니다.
+
+
 # 개발환경
 Windows 10, Android Studio 3.0.1, Java 8
 - Android Studio 2.x 에서 빌드해보지 않았습니다. 에러가 날 수 있습니다.
@@ -45,8 +59,4 @@ PageIndicatorView https://github.com/romandanylyk/PageIndicatorView
 
 
 # 아키텍쳐
-MVP + Interactor(UseCase) + ReactiveX(RxJava2) + DI(Dagger2)
-
-Google Clean Architecture를 참고하였습니다.
-
-![screensh](https://images.contentful.com/emmiduwd41v7/6HuRyfP1Vm4UEIiIEIeMwS/5f66cdc5c4a5af60f24920548babace1/clean-android-architecture2.jpg)
+https://github.com/magewr/CleanArchitecture_Sample
