@@ -61,14 +61,14 @@ public class SplashActivity extends BaseActivity implements SplashContract.View{
         paint.setAntiAlias(true);
 
         Text textTitle = TextBuilder
-                .create("DRAMA & COMPANY")
+                .create("STORY")
                 .setPaint(paint)
                 .setSize(35)
                 .setAlpha(0)
                 .setColor(Color.BLACK)
                 .setPosition(Align.SURFACE_CENTER).build();
         Text textSubTitle = TextBuilder
-                .create("DREAM AND MAKE IT HAPPEN")
+                .create("magewr@gmail.com")
                 .setPaint(paint)
                 .setSize(20)
                 .setAlpha(0)
